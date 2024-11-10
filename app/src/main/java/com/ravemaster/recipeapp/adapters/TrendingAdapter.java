@@ -53,6 +53,7 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.Trendi
         String rating = String.format("%.1f%%",percent);
 
         holder.name.setText(name);
+        holder.name.setSelected(true);
         holder.time.setText(time+" min");
         holder.ratings.setText(rating);
     }
