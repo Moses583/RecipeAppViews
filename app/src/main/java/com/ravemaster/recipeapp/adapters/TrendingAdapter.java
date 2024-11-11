@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ravemaster.recipeapp.R;
-import com.ravemaster.recipeapp.api.models.Item2;
+import com.ravemaster.recipeapp.api.getfeed.models.Item2;
 
 import java.util.ArrayList;
 

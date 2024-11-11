@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.ravemaster.recipeapp.fragments.FeedFragment;
+import com.ravemaster.recipeapp.fragments.SearchFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -16,8 +17,10 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position){
-            case 1:
+            case 0:
                 return new FeedFragment();
+            case 1:
+                return new SearchFragment();
             default:
                 return new FeedFragment();
         }
@@ -25,6 +28,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 2;
     }
 }

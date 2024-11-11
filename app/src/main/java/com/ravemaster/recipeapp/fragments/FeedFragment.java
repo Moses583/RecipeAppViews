@@ -20,10 +20,8 @@ import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.adapters.MealPlanAdapter;
 import com.ravemaster.recipeapp.adapters.TrendingAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
-import com.ravemaster.recipeapp.api.feedinterfaces.FeedsListListener;
-import com.ravemaster.recipeapp.api.models.FeedsApiResponse;
-
-import java.util.ArrayList;
+import com.ravemaster.recipeapp.api.getfeed.feedinterfaces.FeedsListListener;
+import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
 
 public class FeedFragment extends Fragment {
 
@@ -61,6 +59,8 @@ public class FeedFragment extends Fragment {
         manager = new RequestManager(getActivity());
 
         manager.getFeedList(feedsListListener,false);
+
+
 
         return view;
     }
