@@ -1,6 +1,5 @@
 package com.ravemaster.recipeapp.api.getrecipelist.interfaces;
 
-import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
 import com.ravemaster.recipeapp.api.getrecipelist.models.RecipeListApiResponse;
 
 import retrofit2.Call;
@@ -13,6 +12,7 @@ public interface GetRecipeList {
     Call<RecipeListApiResponse> getRecipeList(
             @Query("from") int from,
             @Query("size") int size ,
+            @Query("q") String query,
             @Header("x-rapidapi-key") String apiKey,
             @Header("x-rapidapi-host") String apiHost
     );

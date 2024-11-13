@@ -55,7 +55,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         holder.name.setText(name);
         holder.name.setSelected(true);
         holder.time.setText(time+" min");
+        holder.time.setSelected(true);
         holder.ratings.setText(rating);
+        holder.ratings.setSelected(true);
     }
 
     @Override

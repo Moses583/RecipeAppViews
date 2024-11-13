@@ -3,16 +3,22 @@ package com.ravemaster.recipeapp.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.adapters.RecipeListAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
@@ -23,11 +29,18 @@ public class SearchFragment extends Fragment {
 
     public ShimmerFrameLayout recipePlaceHolder;
     public LinearLayout recipeLayout;
+    public TextInputLayout inputLayout;
+    EditText editText;
+    public Button button;
+    private FloatingActionButton next, previous;
 
     RecyclerView recyclerView;
     RecipeListAdapter adapter;
 
     RequestManager manager;
+
+    public int count = 0;
+    public String query = "";
 
     public SearchFragment() {
         // Required empty public constructor
@@ -46,10 +59,40 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         initViews(view);
+        editText = inputLayout.getEditText();
 
         manager = new RequestManager(getActivity());
 
-        manager.getRecipeList(recipeListListener,0,100);
+        manager.getRecipeList(recipeListListener,count,100,query);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                query = editText.getText().toString();
+                recipeLayout.setVisibility(View.INVISIBLE);
+                recipePlaceHolder.startShimmer();
+                manager.getRecipeList(recipeListListener,count = 0,100,query);
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                count += 20;
+                manager.getRecipeList(recipeListListener,count,20,query);
+            }
+        });
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (count == 0){
+                    manager.getRecipeList(recipeListListener,count,20,query);
+                } else {
+                    count -= 20;
+                    manager.getRecipeList(recipeListListener,count,20,query);
+                }
+            }
+        });
 
         return view;
     }
@@ -90,12 +133,16 @@ public class SearchFragment extends Fragment {
         adapter = new RecipeListAdapter(getActivity(),response.results);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
     }
 
     private void initViews(View view) {
+        inputLayout = view.findViewById(R.id.searchRecipeName);
         recyclerView = view.findViewById(R.id.recipesRecycler);
         recipeLayout = view.findViewById(R.id.recipesLayout);
         recipePlaceHolder = view.findViewById(R.id.recipesPlaceholderLayout);
+        button = view.findViewById(R.id.btnSearchRecipe);
+        next = view.findViewById(R.id.btnNext);
+        previous = view.findViewById(R.id.btnPrevious);
     }
 }
