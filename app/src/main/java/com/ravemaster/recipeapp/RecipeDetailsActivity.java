@@ -101,7 +101,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         int total = positive + negative;
         double percent = ((double) positive / total ) * 100;
         String ratings1 = String.format("%.1f%%",percent);
-        String time1 = String.valueOf(response.total_time_minutes)+" min";
+        String time1 = String.valueOf(response.cook_time_minutes)+" min";
         String servings1 = String.valueOf(response.num_servings)+ " people";
         String description1 = response.description;
 
