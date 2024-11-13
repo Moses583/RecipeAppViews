@@ -1,5 +1,6 @@
 package com.ravemaster.recipeapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,11 +18,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.ravemaster.recipeapp.R;
+import com.ravemaster.recipeapp.RecipeDetailsActivity;
 import com.ravemaster.recipeapp.adapters.MealPlanAdapter;
 import com.ravemaster.recipeapp.adapters.TrendingAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getfeed.feedinterfaces.FeedsListListener;
 import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
+import com.ravemaster.recipeapp.api.getfeed.models.Item2;
+import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
 
 public class FeedFragment extends Fragment {
 
@@ -34,6 +38,7 @@ public class FeedFragment extends Fragment {
     RequestManager manager;
     MealPlanAdapter mealPlanAdapter;
     TrendingAdapter trendingAdapter;
+    public int id = 0;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -60,6 +65,15 @@ public class FeedFragment extends Fragment {
 
         manager.getFeedList(feedsListListener,false);
 
+        imgFeature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
+                intent.putExtra("id",id);
+                startActivity(intent);
+            }
+        });
+
 
 
         return view;
@@ -76,8 +90,9 @@ public class FeedFragment extends Fragment {
             trendingPlaceHolder.stopShimmer();
             trendingPlaceHolder.setVisibility(View.INVISIBLE);
 
+            response = response;
+
             showData(response);
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
         }
 
@@ -90,8 +105,6 @@ public class FeedFragment extends Fragment {
             mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
             trendingPlaceHolder.stopShimmer();
             trendingPlaceHolder.setVisibility(View.INVISIBLE);
-
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
         }
 
@@ -123,7 +136,7 @@ public class FeedFragment extends Fragment {
                 .load(response.results.get(0).item.thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(imgFeature);
-
+        id = response.results.get(0).item.id;
         String name = response.results.get(0).item.name;
         int positive = response.results.get(0).item.user_ratings.count_positive;
         int negative = response.results.get(0).item.user_ratings.count_negative;
@@ -135,7 +148,11 @@ public class FeedFragment extends Fragment {
         txtFeatureName.setText("Featured: "+name);
         txtFeatureName.setSelected(true);
         txtFeatureRating.setText(ratings);
-        txtFeatureTime.setText(time);
+        if (time.equals("0")){
+            txtFeatureTime.setText("60 min");
+        } else {
+            txtFeatureTime.setText(time);
+        }
         txtFeatureServings.setText(servings);
 
         showMealPlanAdapter(response);
@@ -143,7 +160,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void showTrendingRecipes(FeedsApiResponse response) {
-        trendingAdapter = new TrendingAdapter(getActivity(),response.results.get(4).items);
+        trendingAdapter = new TrendingAdapter(getActivity(),response.results.get(4).items,onTrendingClicked);
         trendingRecycler.setAdapter(trendingAdapter);
         trendingRecycler.setHasFixedSize(true);
         trendingRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
@@ -154,6 +171,15 @@ public class FeedFragment extends Fragment {
         mealPlanAdapter = new MealPlanAdapter(getActivity(),response.results.get(1).items);
         mealPlanRecycler.setAdapter(mealPlanAdapter);
     }
+
+    private final OnTrendingClicked onTrendingClicked = new OnTrendingClicked() {
+        @Override
+        public void moveToRecipeDetails(Item2 item) {
+            Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
+            intent.putExtra("id",item.id);
+            startActivity(intent);
+        }
+    };
 
     private void initViews(View view) {
         featurePlaceHolder = view.findViewById(R.id.featurePlaceholderLayout);

@@ -8,11 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.api.getrecipelist.models.Result;
+import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
 
 import java.util.ArrayList;
 
@@ -20,10 +22,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     private Context context;
     private ArrayList<Result> results;
+    private OnRecipeClicked listener;
 
-    public RecipeListAdapter( Context context, ArrayList<Result> results){
+    public RecipeListAdapter( Context context, ArrayList<Result> results, OnRecipeClicked listener){
         this.context = context;
         this.results = results;
+        this.listener = listener;
     }
 
     @NonNull
@@ -54,10 +58,21 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         holder.name.setText(name);
         holder.name.setSelected(true);
-        holder.time.setText(time+" min");
+        if (time.equals("0")){
+            holder.time.setText("60 min");
+        } else {
+            holder.time.setText(time+" min");
+        }
         holder.time.setSelected(true);
         holder.ratings.setText(rating);
         holder.ratings.setSelected(true);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.moveToRecipeActivity(results.get(position));
+            }
+        });
     }
 
     @Override
@@ -69,12 +84,14 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         ImageView imageView;
         TextView name, time, ratings;
+        CardView cardView;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imgRecipe);
             name = itemView.findViewById(R.id.txtRecipeName);
             time = itemView.findViewById(R.id.txtRecipeTime);
             ratings = itemView.findViewById(R.id.txtRecipeRating);
+            cardView = itemView.findViewById(R.id.recipeCardView);
         }
     }
 }

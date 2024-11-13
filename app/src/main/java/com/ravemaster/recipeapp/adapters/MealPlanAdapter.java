@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.api.getfeed.models.Item2;
+import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
 
 import java.util.ArrayList;
 
 public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPlanViewHolder> {
     private Context context;
     private ArrayList<Item2> urls;
-    private OnMealItemSelected listener;
 
     public MealPlanAdapter(Context context, ArrayList<Item2> urls) {
         this.context = context;
@@ -60,13 +60,5 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPl
             super(itemView);
             imageView = itemView.findViewById(R.id.meal_plan_image);
         }
-    }
-
-    public void setListener(OnMealItemSelected listener) {
-        this.listener = listener;
-    }
-
-    public interface OnMealItemSelected{
-        void onClick(ImageView imageView, String url);
     }
 }

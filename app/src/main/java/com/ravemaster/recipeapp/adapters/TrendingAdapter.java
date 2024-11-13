@@ -8,11 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.api.getfeed.models.Item2;
+import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
+import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
 
 import java.util.ArrayList;
 
@@ -20,10 +23,12 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.Trendi
 
     private Context context;
     private ArrayList<Item2> arrayList;
+    private OnTrendingClicked listener;
 
-    public TrendingAdapter(Context context, ArrayList<Item2> arrayList) {
+    public TrendingAdapter(Context context, ArrayList<Item2> arrayList, OnTrendingClicked listener) {
         this.context = context;
         this.arrayList = arrayList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -54,8 +59,19 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.Trendi
 
         holder.name.setText(name);
         holder.name.setSelected(true);
-        holder.time.setText(time+" min");
+        if (time.equals("0")){
+            holder.time.setText("60 min");
+        } else {
+            holder.time.setText(time+" min");
+        }
         holder.ratings.setText(rating);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.moveToRecipeDetails(arrayList.get(position));
+            }
+        });
     }
 
     @Override
@@ -67,12 +83,14 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.Trendi
 
         ImageView imageView;
         TextView name, time, ratings;
+        CardView cardView;
         public TrendingViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imgTrending);
             name = itemView.findViewById(R.id.txtTrendingName);
             time = itemView.findViewById(R.id.txtTrendingTime);
             ratings = itemView.findViewById(R.id.txtTrendingRating);
+            cardView = itemView.findViewById(R.id.trendingCardView);
         }
     }
 }

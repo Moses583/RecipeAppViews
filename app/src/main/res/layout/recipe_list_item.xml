@@ -4,7 +4,11 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="15dp"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:id="@+id/recipeCardView">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,71 +29,63 @@
             android:textStyle="bold"
             android:textSize="18sp"
             android:id="@+id/txtRecipeName"
-            android:layout_margin="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_margin="5dp">
+            android:layout_marginStart="10dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/rating"
+                android:layout_margin="5dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/imgRecipeRating"/>
 
-            <RelativeLayout
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/txtRecipeRating"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="5dp">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/rating"
-                    android:layout_margin="5dp"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/imgRecipeRating"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/imgRecipeRating"
-                    android:id="@+id/txtRecipeRating"
-                    android:layout_centerVertical="true"
-                    android:text="rating"
-                    android:layout_margin="5dp"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="0dp"
+                android:layout_margin="5dp"
+                android:layout_toEndOf="@id/imgRecipeRating"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="rating" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/time"
+                android:layout_margin="5dp"
+                android:id="@+id/imgRecipeTime"
+                android:layout_centerVertical="true"/>
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="5dp">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/time"
-                    android:layout_margin="5dp"
-                    android:id="@+id/imgRecipeTime"
-                    android:layout_centerVertical="true"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/imgRecipeTime"
-                    android:id="@+id/txtRecipeTime"
-                    android:layout_centerVertical="true"
-                    android:text="10 min"
-                    android:layout_margin="5dp"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"/>
-            </RelativeLayout>
-
-        </LinearLayout>
+                android:layout_toEndOf="@id/imgRecipeTime"
+                android:id="@+id/txtRecipeTime"
+                android:layout_centerVertical="true"
+                android:text="10 min"
+                android:layout_margin="5dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"/>
+        </RelativeLayout>
 
     </LinearLayout>
 

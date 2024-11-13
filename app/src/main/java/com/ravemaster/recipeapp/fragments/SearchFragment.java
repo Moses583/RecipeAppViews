@@ -1,5 +1,6 @@
 package com.ravemaster.recipeapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,10 +21,13 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ravemaster.recipeapp.R;
+import com.ravemaster.recipeapp.RecipeDetailsActivity;
 import com.ravemaster.recipeapp.adapters.RecipeListAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getrecipelist.interfaces.RecipeListListener;
 import com.ravemaster.recipeapp.api.getrecipelist.models.RecipeListApiResponse;
+import com.ravemaster.recipeapp.api.getrecipelist.models.Result;
+import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
 
 public class SearchFragment extends Fragment {
 
@@ -70,6 +74,7 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 query = editText.getText().toString();
                 recipeLayout.setVisibility(View.INVISIBLE);
+                recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
                 manager.getRecipeList(recipeListListener,count = 0,100,query);
             }
@@ -79,6 +84,9 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 count += 20;
+                recipeLayout.setVisibility(View.INVISIBLE);
+                recipePlaceHolder.setVisibility(View.VISIBLE);
+                recipePlaceHolder.startShimmer();
                 manager.getRecipeList(recipeListListener,count,20,query);
             }
         });
@@ -86,9 +94,15 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (count == 0){
+                    recipeLayout.setVisibility(View.INVISIBLE);
+                    recipePlaceHolder.setVisibility(View.VISIBLE);
+                    recipePlaceHolder.startShimmer();
                     manager.getRecipeList(recipeListListener,count,20,query);
                 } else {
                     count -= 20;
+                    recipeLayout.setVisibility(View.INVISIBLE);
+                    recipePlaceHolder.setVisibility(View.VISIBLE);
+                    recipePlaceHolder.startShimmer();
                     manager.getRecipeList(recipeListListener,count,20,query);
                 }
             }
@@ -104,15 +118,12 @@ public class SearchFragment extends Fragment {
             recipePlaceHolder.setVisibility(View.INVISIBLE);
 
             showData(response);
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onFailure(String message) {
             recipePlaceHolder.stopShimmer();
             recipePlaceHolder.setVisibility(View.INVISIBLE);
-
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -130,11 +141,20 @@ public class SearchFragment extends Fragment {
     };
 
     private void showData(RecipeListApiResponse response) {
-        adapter = new RecipeListAdapter(getActivity(),response.results);
+        adapter = new RecipeListAdapter(getActivity(),response.results,onRecipeClicked);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
     }
+
+    private final OnRecipeClicked onRecipeClicked = new OnRecipeClicked() {
+        @Override
+        public void moveToRecipeActivity(Result result) {
+            Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
+            intent.putExtra("id",result.id);
+            startActivity(intent);
+        }
+    };
 
     private void initViews(View view) {
         inputLayout = view.findViewById(R.id.searchRecipeName);

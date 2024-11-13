@@ -5,6 +5,9 @@ import android.content.Context;
 import com.ravemaster.recipeapp.api.getfeed.feedinterfaces.FeedsListListener;
 import com.ravemaster.recipeapp.api.getfeed.feedinterfaces.GetFeed;
 import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
+import com.ravemaster.recipeapp.api.getrecipedetails.interfaces.GetRecipeDetails;
+import com.ravemaster.recipeapp.api.getrecipedetails.interfaces.RecipeDetailsListener;
+import com.ravemaster.recipeapp.api.getrecipedetails.models.RecipeDetailApiResponse;
 import com.ravemaster.recipeapp.api.getrecipelist.interfaces.GetRecipeList;
 import com.ravemaster.recipeapp.api.getrecipelist.interfaces.RecipeListListener;
 import com.ravemaster.recipeapp.api.getrecipelist.models.RecipeListApiResponse;
@@ -70,6 +73,29 @@ public class RequestManager {
 
             @Override
             public void onFailure(Call<RecipeListApiResponse> call, Throwable throwable) {
+                listener.onLoading(false);
+                listener.onFailure(throwable.getMessage()+ " from onFailure");
+            }
+        });
+    }
+
+    public void getRecipeDetails(RecipeDetailsListener listener, int id){
+        listener.onLoading(true);
+        GetRecipeDetails getDetails = retrofit.create(GetRecipeDetails.class);
+        Call<RecipeDetailApiResponse> call = getDetails.getDetails(id,"cf8e818c30mshc3a90bc6ac3c539p10a09bjsn3c104522f764","tasty.p.rapidapi.com");
+        call.enqueue(new Callback<RecipeDetailApiResponse>() {
+            @Override
+            public void onResponse(Call<RecipeDetailApiResponse> call, Response<RecipeDetailApiResponse> response) {
+                listener.onLoading(false);
+                if (!response.isSuccessful()){
+                    listener.onFailure(String.valueOf(response.code())+" from onResponse");
+                    return;
+                }
+                listener.onResponse(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<RecipeDetailApiResponse> call, Throwable throwable) {
                 listener.onLoading(false);
                 listener.onFailure(throwable.getMessage()+ " from onFailure");
             }
