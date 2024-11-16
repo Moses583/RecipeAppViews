@@ -22,6 +22,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getrecipedetails.interfaces.RecipeDetailsListener;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Component;
@@ -39,7 +40,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     ImageView imgRecipe;
     TextView name, servings, ratings, time, description, foodItem, ingredients, instructions;
     ShimmerFrameLayout placeholder;
-    LinearLayout layout,itemsLayout;
+    LinearLayout layout,itemsLayout, chartLayout;
+
+    ExtendedFloatingActionButton btnPlayButton;
 
     PieChart chart;
 
@@ -62,6 +65,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         manager.getRecipeDetails(listener,id);
 
         description.setTextIsSelectable(true);
+
+        btnPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(RecipeDetailsActivity.this, "video will be played later", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,23 +175,27 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         ingredientItem = builder1.toString();
         ingredients.setText(ingredientItem);
 
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry((float) response.nutrition.calories, "Calories"));
-        entries.add(new PieEntry((float) response.nutrition.carbohydrates, "Carbohydrates"));
-        entries.add(new PieEntry((float) response.nutrition.fat, "Fat"));
-        entries.add(new PieEntry((float) response.nutrition.fiber, "Fiber"));
-        entries.add(new PieEntry((float) response.nutrition.protein, "Protein"));
-        entries.add(new PieEntry((float) response.nutrition.sugar, "Sugar"));
+        if (response.nutrition != null){
+            chartLayout.setVisibility(View.VISIBLE);
 
-        PieDataSet dataSet = new PieDataSet(entries, "Nutrition");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            ArrayList<PieEntry> entries = new ArrayList<>();
+            entries.add(new PieEntry((float) response.nutrition.calories, "Calories"));
+            entries.add(new PieEntry((float) response.nutrition.carbohydrates, "Carbohydrates"));
+            entries.add(new PieEntry((float) response.nutrition.fat, "Fat"));
+            entries.add(new PieEntry((float) response.nutrition.fiber, "Fiber"));
+            entries.add(new PieEntry((float) response.nutrition.protein, "Protein"));
+            entries.add(new PieEntry((float) response.nutrition.sugar, "Sugar"));
 
-        PieData pieData = new PieData(dataSet);
-        chart.setData(pieData);
+            PieDataSet dataSet = new PieDataSet(entries, "Nutrition");
+            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
-        chart.getDescription().setEnabled(false);
-        chart.animateY(1000);
-        chart.invalidate();
+            PieData pieData = new PieData(dataSet);
+            chart.setData(pieData);
+
+            chart.getDescription().setEnabled(false);
+            chart.animateY(1000);
+            chart.invalidate();
+        }
 
         StringBuilder builder2 = new StringBuilder();
         String steps = "";
@@ -193,6 +207,12 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
         steps = builder2.toString();
         instructions.setText(steps);
+
+        String videoUrl = (String) response.video_url;
+
+        if (!videoUrl.equals("null")){
+            btnPlayButton.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -214,7 +234,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         placeholder = findViewById(R.id.detailPlaceHolderLayout);
         layout = findViewById(R.id.detailLayout);
         itemsLayout = findViewById(R.id.itemsLayout);
+        chartLayout = findViewById(R.id.chartLayout);
 
         chart = findViewById(R.id.nutritionChart);
+
+        btnPlayButton = findViewById(R.id.btnPlayVideo);
     }
 }
