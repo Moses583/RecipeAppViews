@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -73,9 +72,6 @@ public class FeedFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
-
         return view;
     }
 
@@ -89,8 +85,6 @@ public class FeedFragment extends Fragment {
             mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
             trendingPlaceHolder.stopShimmer();
             trendingPlaceHolder.setVisibility(View.INVISIBLE);
-
-            response = response;
 
             showData(response);
 
@@ -136,15 +130,21 @@ public class FeedFragment extends Fragment {
                 .load(response.results.get(0).item.thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(imgFeature);
+
         id = response.results.get(0).item.id;
+
         String name = response.results.get(0).item.name;
+
         int positive = response.results.get(0).item.user_ratings.count_positive;
         int negative = response.results.get(0).item.user_ratings.count_negative;
         int total = positive + negative;
         double percent = ((double) positive / total ) * 100;
         String ratings = String.format("%.1f%%",percent);
+
         String time = String.valueOf(response.results.get(0).item.cook_time_minutes)+" min";
+
         String servings = String.valueOf(response.results.get(0).item.num_servings)+ " people";
+
         txtFeatureName.setText("Featured: "+name);
         txtFeatureName.setSelected(true);
         txtFeatureRating.setText(ratings);

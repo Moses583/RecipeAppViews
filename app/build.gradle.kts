@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ravemaster.recipeapp"
-        minSdk = 24
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -50,6 +50,7 @@ dependencies {
 
     implementation(libs.shimmer.android)
 
+    implementation(libs.chart.dependency)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

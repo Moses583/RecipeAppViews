@@ -82,7 +82,7 @@
                     android:id="@+id/detailDummy31"
                     android:layout_centerVertical="true"/>
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:background="#DDDDDD"
                     android:layout_centerVertical="true"
