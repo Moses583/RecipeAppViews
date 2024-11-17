@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.api.getfeed.models.Item2;
+import com.ravemaster.recipeapp.clickinterfaces.OnMealPlanClicked;
 import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
 
 import java.util.ArrayList;
@@ -19,10 +21,12 @@ import java.util.ArrayList;
 public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPlanViewHolder> {
     private Context context;
     private ArrayList<Item2> urls;
+    OnMealPlanClicked onMealPlanClicked;
 
-    public MealPlanAdapter(Context context, ArrayList<Item2> urls) {
+    public MealPlanAdapter(Context context, ArrayList<Item2> urls,OnMealPlanClicked onMealPlanClicked) {
         this.context = context;
         this.urls = urls;
+        this.onMealPlanClicked = onMealPlanClicked;
     }
 
     @NonNull
@@ -36,16 +40,17 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPl
 
         Glide
                 .with(context)
-                .load(urls.get(0).thumbnail_urls.get(position))
+                .load(urls.get(position).thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.imageView);
+        holder.mealPlanName.setText(urls.get(position).name);
 
-//        holder.imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listener.onClick(holder.imageView,urls.get(holder.getAdapterPosition()).thumbnail_url);
-//            }
-//        });
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMealPlanClicked.moveToRecipeDetails(urls.get(position));
+            }
+        });
 
     }
 
@@ -56,9 +61,11 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPl
 
     public static class MealPlanViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView mealPlanName;
         public MealPlanViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.meal_plan_image);
+            mealPlanName = itemView.findViewById(R.id.txtMealPlanName);
         }
     }
 }

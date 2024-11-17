@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getfeed.feedinterfaces.FeedsListListener;
 import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
 import com.ravemaster.recipeapp.api.getfeed.models.Item2;
+import com.ravemaster.recipeapp.clickinterfaces.OnMealPlanClicked;
 import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
 
 public class FeedFragment extends Fragment {
@@ -33,6 +35,8 @@ public class FeedFragment extends Fragment {
     ImageView imgFeature;
     TextView txtFeatureName, txtFeatureRating, txtFeatureTime, txtFeatureServings,txtMealPlanTitle;
     RecyclerView mealPlanRecycler,trendingRecycler;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     RequestManager manager;
     MealPlanAdapter mealPlanAdapter;
@@ -72,12 +76,30 @@ public class FeedFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                manager.getFeedList(feedsListListener,false);
+                featureLayout.setVisibility(View.INVISIBLE);
+                featurePlaceHolder.setVisibility(View.VISIBLE);
+                featurePlaceHolder.startShimmer();
+                mealPlanLayout.setVisibility(View.INVISIBLE);
+                mealPlanPlaceHolder.setVisibility(View.VISIBLE);
+                mealPlanPlaceHolder.startShimmer();
+                trendingLayout.setVisibility(View.INVISIBLE);
+                trendingPlaceHolder.setVisibility(View.VISIBLE);
+                trendingPlaceHolder.startShimmer();
+            }
+        });
         return view;
     }
 
     private final FeedsListListener feedsListListener = new FeedsListListener() {
         @Override
         public void onResponse(FeedsApiResponse response, String message) {
+
+            swipeRefreshLayout.setRefreshing(false);
 
             featurePlaceHolder.stopShimmer();
             featurePlaceHolder.setVisibility(View.INVISIBLE);
@@ -92,6 +114,8 @@ public class FeedFragment extends Fragment {
 
         @Override
         public void onError(String message) {
+
+            swipeRefreshLayout.setRefreshing(false);
 
             featurePlaceHolder.stopShimmer();
             featurePlaceHolder.setVisibility(View.INVISIBLE);
@@ -112,6 +136,9 @@ public class FeedFragment extends Fragment {
                 trendingLayout.setVisibility(View.INVISIBLE);
                 trendingPlaceHolder.startShimmer();
             } else {
+
+                swipeRefreshLayout.setRefreshing(false);
+
                 featurePlaceHolder.stopShimmer();
                 featurePlaceHolder.setVisibility(View.INVISIBLE);
                 featureLayout.setVisibility(View.VISIBLE);
@@ -167,10 +194,19 @@ public class FeedFragment extends Fragment {
     }
 
     private void showMealPlanAdapter(FeedsApiResponse response) {
-        txtMealPlanTitle.setText("Plans: "+response.results.get(1).name);
-        mealPlanAdapter = new MealPlanAdapter(getActivity(),response.results.get(1).items);
+        txtMealPlanTitle.setText("Plans: "+response.results.get(2).name);
+        mealPlanAdapter = new MealPlanAdapter(getActivity(),response.results.get(2).items,onMealPlanClicked);
         mealPlanRecycler.setAdapter(mealPlanAdapter);
     }
+
+    private final OnMealPlanClicked onMealPlanClicked = new OnMealPlanClicked() {
+        @Override
+        public void moveToRecipeDetails(Item2 item2) {
+            Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
+            intent.putExtra("id",item2.id);
+            startActivity(intent);
+        }
+    };
 
     private final OnTrendingClicked onTrendingClicked = new OnTrendingClicked() {
         @Override
@@ -196,5 +232,6 @@ public class FeedFragment extends Fragment {
         mealPlanRecycler = view.findViewById(R.id.mealPlanRecycler);
         txtMealPlanTitle = view.findViewById(R.id.txtMealPlanTitle);
         trendingRecycler = view.findViewById(R.id.trendingRecycler);
+        swipeRefreshLayout = view.findViewById(R.id.feedRefresh);
     }
 }

@@ -42,29 +42,34 @@
             android:text="Search"
             style="@style/Widget.Material3.Button.TonalButton"/>
 
-        <RelativeLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_height="wrap_content"
+            android:id="@+id/searchRefresh">
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:id="@+id/recipesPlaceholderLayout">
-                <include layout="@layout/recipe_placeholder"/>
-            </com.facebook.shimmer.ShimmerFrameLayout>
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:id="@+id/recipesLayout">
-                <include layout="@layout/recipes_list" />
-            </LinearLayout>
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:id="@+id/recipesPlaceholderLayout">
+                    <include layout="@layout/recipe_placeholder"/>
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
-        </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:id="@+id/recipesLayout">
+                    <include layout="@layout/recipes_list" />
+                </LinearLayout>
+
+            </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

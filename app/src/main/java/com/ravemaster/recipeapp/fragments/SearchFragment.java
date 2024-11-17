@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,8 @@ public class SearchFragment extends Fragment {
     public Button button;
     private FloatingActionButton next, previous;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     RecyclerView recyclerView;
     RecipeListAdapter adapter;
 
@@ -67,7 +70,7 @@ public class SearchFragment extends Fragment {
 
         manager = new RequestManager(getActivity());
 
-        manager.getRecipeList(recipeListListener,count,100,query);
+        manager.getRecipeList(recipeListListener,count,20,query);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +79,7 @@ public class SearchFragment extends Fragment {
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
-                manager.getRecipeList(recipeListListener,count = 0,100,query);
+                manager.getRecipeList(recipeListListener,count = 0,20,query);
             }
         });
 
@@ -108,12 +111,25 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                manager.getRecipeList(recipeListListener,count,20,query);
+                recipeLayout.setVisibility(View.INVISIBLE);
+                recipePlaceHolder.setVisibility(View.VISIBLE);
+                recipePlaceHolder.startShimmer();
+            }
+        });
+
         return view;
     }
 
     private final RecipeListListener recipeListListener = new RecipeListListener() {
         @Override
         public void onResponse(RecipeListApiResponse response, String message) {
+
+            swipeRefreshLayout.setRefreshing(false);
+
             recipePlaceHolder.stopShimmer();
             recipePlaceHolder.setVisibility(View.INVISIBLE);
 
@@ -122,6 +138,7 @@ public class SearchFragment extends Fragment {
 
         @Override
         public void onFailure(String message) {
+            swipeRefreshLayout.setRefreshing(false);
             recipePlaceHolder.stopShimmer();
             recipePlaceHolder.setVisibility(View.INVISIBLE);
         }
@@ -133,6 +150,7 @@ public class SearchFragment extends Fragment {
                 recipePlaceHolder.startShimmer();
 
             } else {
+                swipeRefreshLayout.setRefreshing(false);
                 recipePlaceHolder.stopShimmer();
                 recipePlaceHolder.setVisibility(View.INVISIBLE);
                 recipeLayout.setVisibility(View.VISIBLE);
@@ -164,5 +182,6 @@ public class SearchFragment extends Fragment {
         button = view.findViewById(R.id.btnSearchRecipe);
         next = view.findViewById(R.id.btnNext);
         previous = view.findViewById(R.id.btnPrevious);
+        swipeRefreshLayout = view.findViewById(R.id.searchRefresh);
     }
 }

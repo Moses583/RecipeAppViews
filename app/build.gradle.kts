@@ -52,6 +52,14 @@ dependencies {
 
     implementation(libs.chart.dependency)
 
+    implementation(libs.exoplayer)
+
+    implementation(libs.media3)
+    implementation(libs.media3UI)
+    implementation(libs.media3HLS)
+
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

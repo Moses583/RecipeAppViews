@@ -1,6 +1,7 @@
 package com.ravemaster.recipeapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -23,12 +27,17 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.ravemaster.recipeapp.adapters.SimilarAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getrecipedetails.interfaces.RecipeDetailsListener;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Component;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Instruction;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.RecipeDetailApiResponse;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Section;
+import com.ravemaster.recipeapp.api.getsimilarrecipes.interfaces.SimilarRecipeListener;
+import com.ravemaster.recipeapp.api.getsimilarrecipes.models.Result;
+import com.ravemaster.recipeapp.api.getsimilarrecipes.models.SimilarRecipeApiResponse;
+import com.ravemaster.recipeapp.clickinterfaces.OnSimilarClicked;
 
 import java.util.ArrayList;
 
@@ -38,13 +47,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     RequestManager manager;
     CardView goBack, save;
     ImageView imgRecipe;
-    TextView name, servings, ratings, time, description, foodItem, ingredients, instructions;
-    ShimmerFrameLayout placeholder;
-    LinearLayout layout,itemsLayout, chartLayout;
+    TextView name, servings, ratings, time, description, ingredients, instructions;
+    ShimmerFrameLayout placeholder, similarPlaceHolder;
+    LinearLayout layout, chartLayout, similarLayout;
+    RecyclerView recyclerView;
+
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    SimilarAdapter similarAdapter;
 
     ExtendedFloatingActionButton btnPlayButton;
+    int id;
 
     PieChart chart;
+
+    String videoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +76,29 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         initViews();
 
         Intent intent = getIntent();
-        int id = intent.getIntExtra("id",0);
+        id = intent.getIntExtra("id",0);
 
         manager = new RequestManager(this);
         manager.getRecipeDetails(listener,id);
+        manager.getSimilarRecipes(similarRecipeListener,id);
 
         description.setTextIsSelectable(true);
 
-        btnPlayButton.setOnClickListener(new View.OnClickListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(RecipeDetailsActivity.this, "video will be played later", Toast.LENGTH_SHORT).show();
+            public void onRefresh() {
+
+                manager.getRecipeDetails(listener,id);
+                manager.getSimilarRecipes(similarRecipeListener,id);
+
+                similarLayout.setVisibility(View.INVISIBLE);
+                similarPlaceHolder.setVisibility(View.VISIBLE);
+                similarPlaceHolder.startShimmer();
+
+                layout.setVisibility(View.INVISIBLE);
+                placeholder.setVisibility(View.VISIBLE);
+                placeholder.startShimmer();
+
             }
         });
 
@@ -80,11 +109,76 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             }
         });
 
+        btnPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(RecipeDetailsActivity.this, VideoActivity.class);
+                intent1.putExtra("videoUrl",videoUrl);
+                startActivity(intent1);
+
+            }
+        });
+
     }
+
+    private final SimilarRecipeListener similarRecipeListener = new SimilarRecipeListener() {
+        @Override
+        public void onResponse(SimilarRecipeApiResponse response, String message) {
+
+            swipeRefreshLayout.setRefreshing(false);
+
+            similarPlaceHolder.stopShimmer();
+            similarPlaceHolder.setVisibility(View.INVISIBLE);
+
+            showSimilarRecipes(response);
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+            swipeRefreshLayout.setRefreshing(false);
+
+            similarPlaceHolder.stopShimmer();
+            similarPlaceHolder.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void onLoading(boolean isLoading) {
+            if (isLoading){
+                similarLayout.setVisibility(View.INVISIBLE);
+                similarPlaceHolder.startShimmer();
+            } else {
+
+                swipeRefreshLayout.setRefreshing(false);
+
+                similarPlaceHolder.stopShimmer();
+                similarPlaceHolder.setVisibility(View.INVISIBLE);
+                similarLayout.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
+    private void showSimilarRecipes(SimilarRecipeApiResponse response) {
+        similarAdapter = new SimilarAdapter(this,response.results,similarClicked);
+        recyclerView.setAdapter(similarAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setHasFixedSize(true);
+    }
+
+    private final OnSimilarClicked similarClicked = new OnSimilarClicked() {
+        @Override
+        public void moveToRecipeDetails(Result result) {
+            finish();
+            Intent intent3 = new Intent(RecipeDetailsActivity.this, RecipeDetailsActivity.class);
+            intent3.putExtra("id",result.id);
+            startActivity(intent3);
+        }
+    };
 
     private final RecipeDetailsListener listener = new RecipeDetailsListener() {
         @Override
         public void onResponse(RecipeDetailApiResponse response, String message) {
+            swipeRefreshLayout.setRefreshing(false);
             placeholder.stopShimmer();
             placeholder.setVisibility(View.INVISIBLE);
             showData(response);
@@ -92,6 +186,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(String message) {
+            swipeRefreshLayout.setRefreshing(false);
             placeholder.stopShimmer();
             placeholder.setVisibility(View.INVISIBLE);
             description.setText(message);
@@ -104,6 +199,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 placeholder.startShimmer();
 
             } else {
+
+                swipeRefreshLayout.setRefreshing(false);
+
                 placeholder.stopShimmer();
                 placeholder.setVisibility(View.INVISIBLE);
                 layout.setVisibility(View.VISIBLE);
@@ -137,23 +235,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             time.setText(time1);
         }
 
-        if (description1.isEmpty()){
+        if (description1==null){
             description.setText("Description unavailable");
         } else {
             description.setText(description1);
-        }
-        ArrayList<Section> items;
-        items = response.sections;
-
-        StringBuilder builder = new StringBuilder();
-        for (Section item: items){
-            builder.append("~").append(item.name).append("\n\n");
-
-        }
-        String item = builder.toString();
-        if (response.sections.size()>1){
-            itemsLayout.setVisibility(View.VISIBLE);
-            foodItem.setText(item);
         }
 
         ArrayList<Integer> positions = new ArrayList<>();
@@ -186,13 +271,25 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             entries.add(new PieEntry((float) response.nutrition.protein, "Protein"));
             entries.add(new PieEntry((float) response.nutrition.sugar, "Sugar"));
 
-            PieDataSet dataSet = new PieDataSet(entries, "Nutrition");
-            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            PieDataSet dataSet = new PieDataSet(entries,"");
+
+            ArrayList<Integer> colors = new ArrayList<>();
+            colors.add(Color.BLUE);
+            colors.add(Color.RED);
+            colors.add(Color.GREEN);
+            colors.add(Color.YELLOW);
+            colors.add(Color.MAGENTA);
+            colors.add(Color.GRAY);
+            dataSet.setColors(colors);
+            dataSet.setDrawValues(false);
 
             PieData pieData = new PieData(dataSet);
             chart.setData(pieData);
 
+            chart.setDrawEntryLabels(false);
+
             chart.getDescription().setEnabled(false);
+            chart.getLegend().setEnabled(true);
             chart.animateY(1000);
             chart.invalidate();
         }
@@ -208,9 +305,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         steps = builder2.toString();
         instructions.setText(steps);
 
-        String videoUrl = (String) response.video_url;
+        videoUrl = (String) response.video_url;
 
-        if (!videoUrl.equals("null")){
+        if (!(videoUrl == null)){
             btnPlayButton.setVisibility(View.VISIBLE);
         }
 
@@ -227,17 +324,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         ratings = findViewById(R.id.txtDetailRating);
         time = findViewById(R.id.txtDetailTime);
         servings = findViewById(R.id.txtDetailServings);
-        foodItem = findViewById(R.id.txtFoodItems);
         ingredients = findViewById(R.id.txtIngredients);
         instructions = findViewById(R.id.txtInstructions);
 
         placeholder = findViewById(R.id.detailPlaceHolderLayout);
+        similarPlaceHolder = findViewById(R.id.similarPlaceHolderLayout);
         layout = findViewById(R.id.detailLayout);
-        itemsLayout = findViewById(R.id.itemsLayout);
+        similarLayout = findViewById(R.id.similarLayout);
         chartLayout = findViewById(R.id.chartLayout);
+
+        recyclerView = findViewById(R.id.similarRecycler);
 
         chart = findViewById(R.id.nutritionChart);
 
         btnPlayButton = findViewById(R.id.btnPlayVideo);
+
+        swipeRefreshLayout = findViewById(R.id.recipeRefresh);
     }
 }
