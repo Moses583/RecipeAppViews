@@ -114,7 +114,7 @@ public class SearchFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                manager.getRecipeList(recipeListListener,count,20,query);
+                manager.getRecipeList(recipeListListener,count,20,"");
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
@@ -141,6 +141,9 @@ public class SearchFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
             recipePlaceHolder.stopShimmer();
             recipePlaceHolder.setVisibility(View.INVISIBLE);
+            if (message.contains("timeout")){
+                Toast.makeText(getActivity(), "Please check your connection and try again", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override

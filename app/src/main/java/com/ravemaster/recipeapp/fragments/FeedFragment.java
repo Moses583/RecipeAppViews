@@ -1,6 +1,8 @@
 package com.ravemaster.recipeapp.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,12 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -27,13 +31,15 @@ import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
 import com.ravemaster.recipeapp.api.getfeed.models.Item2;
 import com.ravemaster.recipeapp.clickinterfaces.OnMealPlanClicked;
 import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
+import com.ravemaster.recipeapp.utilities.Constants;
+import com.ravemaster.recipeapp.utilities.PreferenceManager;
 
 public class FeedFragment extends Fragment {
 
     public ShimmerFrameLayout featurePlaceHolder, mealPlanPlaceHolder,trendingPlaceHolder;
     public LinearLayout featureLayout,mealPlanLayout,trendingLayout;
-    ImageView imgFeature;
-    TextView txtFeatureName, txtFeatureRating, txtFeatureTime, txtFeatureServings,txtMealPlanTitle;
+    ImageView imgFeature,userProfile;
+    TextView txtFeatureName, txtFeatureRating, txtFeatureTime, txtFeatureServings,txtMealPlanTitle,txtUsername;
     RecyclerView mealPlanRecycler,trendingRecycler;
 
     SwipeRefreshLayout swipeRefreshLayout;
@@ -41,6 +47,7 @@ public class FeedFragment extends Fragment {
     RequestManager manager;
     MealPlanAdapter mealPlanAdapter;
     TrendingAdapter trendingAdapter;
+    PreferenceManager preferenceManager;
     public int id = 0;
 
     public FeedFragment() {
@@ -65,6 +72,17 @@ public class FeedFragment extends Fragment {
         initViews(view);
 
         manager = new RequestManager(getActivity());
+        preferenceManager = new PreferenceManager(getActivity());
+
+        txtUsername.setText("Hello "+preferenceManager.getString(Constants.KEY_NAME));
+
+        if (preferenceManager.getString(Constants.KEY_IMAGE).equals("")){
+            userProfile.setBackgroundResource(R.drawable.img);
+        } else {
+            byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+            userProfile.setImageBitmap(bitmap);
+        }
 
         manager.getFeedList(feedsListListener,false);
 
@@ -116,6 +134,10 @@ public class FeedFragment extends Fragment {
         public void onError(String message) {
 
             swipeRefreshLayout.setRefreshing(false);
+
+            if (message.contains("timeout")){
+                Toast.makeText(getActivity(), "Please check your connection and try again", Toast.LENGTH_LONG).show();
+            }
 
             featurePlaceHolder.stopShimmer();
             featurePlaceHolder.setVisibility(View.INVISIBLE);
@@ -233,5 +255,7 @@ public class FeedFragment extends Fragment {
         txtMealPlanTitle = view.findViewById(R.id.txtMealPlanTitle);
         trendingRecycler = view.findViewById(R.id.trendingRecycler);
         swipeRefreshLayout = view.findViewById(R.id.feedRefresh);
+        txtUsername = view.findViewById(R.id.txtUsername);
+        userProfile = view.findViewById(R.id.userImage);
     }
 }

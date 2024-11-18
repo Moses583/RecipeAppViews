@@ -140,6 +140,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
             similarPlaceHolder.stopShimmer();
             similarPlaceHolder.setVisibility(View.INVISIBLE);
+
+            if (message.contains("timeout")){
+                Toast.makeText(RecipeDetailsActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override
@@ -190,6 +194,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             placeholder.stopShimmer();
             placeholder.setVisibility(View.INVISIBLE);
             description.setText(message);
+            if (message.contains("timeout")){
+                Toast.makeText(RecipeDetailsActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override

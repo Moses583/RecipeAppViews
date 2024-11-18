@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.idSearch) {
                 viewPager2.setCurrentItem(1);
                 return true;
+            } else if (item.getItemId() == R.id.idLibrary) {
+                viewPager2.setCurrentItem(2);
+                return true;
+            } else if (item.getItemId() == R.id.idSettings) {
+                viewPager2.setCurrentItem(3);
+                return true;
             }
             return false;
         }

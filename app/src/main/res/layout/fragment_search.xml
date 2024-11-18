@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputFilledStyle"
             android:id="@+id/searchRecipeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
             android:layout_gravity="center"
             android:id="@+id/btnSearchRecipe"
             android:text="Search"
-            style="@style/Widget.Material3.Button.TonalButton"/>
+            style="@style/Widget.Material3.Button.TextButton"/>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
