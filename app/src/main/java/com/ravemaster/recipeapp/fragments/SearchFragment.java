@@ -81,14 +81,15 @@ public class SearchFragment extends Fragment {
         offset = random.nextInt(50);
 
 
-        manager.getRecipeList(recipeListListener,offset,200, mainQuery);
+        manager.getRecipeList(recipeListListener,offset,50, mainQuery);
         manager.getAutoComplete(autoCompleteListener,"lasagna");
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                offset = 0;
                 offset = random.nextInt(50);
-                manager.getRecipeList(recipeListListener,offset,200,"");
+                manager.getRecipeList(recipeListListener,offset,50,"");
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
