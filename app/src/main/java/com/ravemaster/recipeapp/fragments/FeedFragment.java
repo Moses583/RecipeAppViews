@@ -209,15 +209,15 @@ public class FeedFragment extends Fragment {
     }
 
     private void showTrendingRecipes(FeedsApiResponse response) {
-        trendingAdapter = new TrendingAdapter(getActivity(),response.results.get(4).items,onTrendingClicked);
+        trendingAdapter = new TrendingAdapter(getActivity(),response.results.get(5).items,onTrendingClicked);
         trendingRecycler.setAdapter(trendingAdapter);
         trendingRecycler.setHasFixedSize(true);
         trendingRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
     }
 
     private void showMealPlanAdapter(FeedsApiResponse response) {
-        txtMealPlanTitle.setText("Plans: "+response.results.get(2).name);
-        mealPlanAdapter = new MealPlanAdapter(getActivity(),response.results.get(2).items,onMealPlanClicked);
+        txtMealPlanTitle.setText(response.results.get(3).name);
+        mealPlanAdapter = new MealPlanAdapter(getActivity(),response.results.get(3).items,onMealPlanClicked);
         mealPlanRecycler.setAdapter(mealPlanAdapter);
     }
 
