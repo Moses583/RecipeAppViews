@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.ravemaster.recipeapp.R;
@@ -50,6 +51,8 @@ public class SearchFragment extends Fragment {
     RecyclerView recyclerView,autoRecycler;
     RecipeListAdapter adapter;
     AutoCompleteAdapter autoCompleteAdapter;
+
+    FloatingActionButton btnNext, btnPrev;
 
     RequestManager manager;
 
@@ -81,15 +84,39 @@ public class SearchFragment extends Fragment {
         offset = random.nextInt(50);
 
 
-        manager.getRecipeList(recipeListListener,offset,2, mainQuery);
+        manager.getRecipeList(recipeListListener,offset,10, mainQuery);
         manager.getAutoComplete(autoCompleteListener,"lasagna");
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                offset += 10;
+                manager.getRecipeList(recipeListListener,offset, count,mainQuery);
+                recipeLayout.setVisibility(View.INVISIBLE);
+                recipePlaceHolder.setVisibility(View.VISIBLE);
+                recipePlaceHolder.startShimmer();
+            }
+        });
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (offset != 0) {
+                    offset -= 10;
+                }
+                manager.getRecipeList(recipeListListener,offset, count,mainQuery);
+                recipeLayout.setVisibility(View.INVISIBLE);
+                recipePlaceHolder.setVisibility(View.VISIBLE);
+                recipePlaceHolder.startShimmer();
+            }
+        });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 offset = 0;
                 offset = random.nextInt(50);
-                manager.getRecipeList(recipeListListener,offset,2,"");
+                manager.getRecipeList(recipeListListener,offset,10,"");
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
@@ -127,7 +154,7 @@ public class SearchFragment extends Fragment {
                     recipeLayout.setVisibility(View.INVISIBLE);
                     recipePlaceHolder.setVisibility(View.VISIBLE);
                     recipePlaceHolder.startShimmer();
-                    manager.getRecipeList(recipeListListener,count,2,mainQuery);
+                    manager.getRecipeList(recipeListListener,count,10,mainQuery);
 
                     searchView.hide();
                     // Perform your search logic here
@@ -226,7 +253,7 @@ public class SearchFragment extends Fragment {
             recipeLayout.setVisibility(View.INVISIBLE);
             recipePlaceHolder.setVisibility(View.VISIBLE);
             recipePlaceHolder.startShimmer();
-            manager.getRecipeList(recipeListListener,0,2,result.display);
+            manager.getRecipeList(recipeListListener,0,10,result.display);
         }
     };
 
@@ -238,5 +265,7 @@ public class SearchFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.searchRefresh);
         searchBar = view.findViewById(R.id.mySearch_bar);
         searchView = view.findViewById(R.id.mySearchView);
+        btnNext = view.findViewById(R.id.btnNext);
+        btnPrev = view.findViewById(R.id.btnPrev);
     }
 }
