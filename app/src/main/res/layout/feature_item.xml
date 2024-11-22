@@ -19,16 +19,14 @@
             android:id="@+id/imgFeature"/>
 
     </androidx.cardview.widget.CardView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:id="@+id/layOne"
             android:layout_margin="10dp">
             <ImageView
                 android:layout_width="24dp"
@@ -47,10 +45,11 @@
                 android:layout_margin="5dp"/>
         </RelativeLayout>
         <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="10dp">
+            android:id="@+id/layTwo"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@id/layOne">
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -68,9 +67,10 @@
                 android:layout_margin="5dp"/>
         </RelativeLayout>
         <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_toEndOf="@id/layTwo"
+            android:id="@+id/layThree"
             android:layout_margin="10dp">
             <ImageView
                 android:layout_width="24dp"
@@ -88,9 +88,7 @@
                 android:text="rating"
                 android:layout_margin="5dp"/>
         </RelativeLayout>
+    </RelativeLayout>
 
-
-
-    </LinearLayout>
 
 </LinearLayout>

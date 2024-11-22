@@ -10,6 +10,10 @@
         android:id="@+id/idSearch"
         android:icon="@drawable/search"/>
     <item
+        android:title="Library"
+        android:id="@+id/idLibrary"
+        android:icon="@drawable/ic_saved_recipes"/>
+    <item
         android:title="Settings"
         android:id="@+id/idSettings"
         android:icon="@drawable/ic_settings"/>

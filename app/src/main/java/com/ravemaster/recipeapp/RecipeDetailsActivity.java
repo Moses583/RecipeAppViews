@@ -1,7 +1,6 @@
 package com.ravemaster.recipeapp;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,7 +27,6 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.ravemaster.recipeapp.adapters.SimilarAdapter;
@@ -42,7 +40,7 @@ import com.ravemaster.recipeapp.api.getsimilarrecipes.interfaces.SimilarRecipeLi
 import com.ravemaster.recipeapp.api.getsimilarrecipes.models.Result;
 import com.ravemaster.recipeapp.api.getsimilarrecipes.models.SimilarRecipeApiResponse;
 import com.ravemaster.recipeapp.clickinterfaces.OnSimilarClicked;
-import com.ravemaster.recipeapp.utilities.Constants;
+import com.ravemaster.recipeapp.db.DBHelper;
 import com.ravemaster.recipeapp.utilities.PreferenceManager;
 
 import java.util.ArrayList;
@@ -73,8 +71,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
     DBHelper helper;
 
-    ArrayList<Integer> ids = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +93,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         manager.getRecipeDetails(listener,id);
 
         description.setTextIsSelectable(true);
-
-        ids = getIds();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -131,12 +125,19 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(RecipeDetailsActivity.this);
                 View view = LayoutInflater.from(RecipeDetailsActivity.this).inflate(R.layout.bottom_sheet_android,null);
                 RelativeLayout selectShare = view.findViewById(R.id.selectShare);
+                RelativeLayout selectSave = view.findViewById(R.id.selectSave);
                 bottomSheetDialog.setContentView(view);
                 bottomSheetDialog.show();
                 selectShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(RecipeDetailsActivity.this, "Share will be implemented soon!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                selectSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addToDatabase();
                     }
                 });
             }
@@ -152,6 +153,19 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void addToDatabase() {
+        String s1 = name.getText().toString();
+        String s2 = description.getText().toString();
+        String s3 = ingredients.getText().toString();
+        String s4 = instructions.getText().toString();
+        boolean insertData = helper.insertData(s1,s2,s3,s4);
+        if (insertData){
+            Toast.makeText(RecipeDetailsActivity.this, "Added to library successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(RecipeDetailsActivity.this, "Unable to add to library.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private final SimilarRecipeListener similarRecipeListener = new SimilarRecipeListener() {
@@ -351,21 +365,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             btnPlayButton.setVisibility(View.VISIBLE);
         }
 
-    }
-
-    public ArrayList<Integer> getIds(){
-        Cursor cursor = helper.getIds();
-        ArrayList<Integer> integers = new ArrayList<>();
-        if (cursor.getCount() == 0){
-            Toast.makeText(RecipeDetailsActivity.this, "", Toast.LENGTH_SHORT).show();
-        }else{
-            while (cursor.moveToNext()){
-                int id = cursor.getInt(0);
-                integers.add(id);
-            }
-        }
-        cursor.close();
-        return integers;
     }
 
     private void initViews() {
