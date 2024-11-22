@@ -56,7 +56,6 @@ public class SearchFragment extends Fragment {
 
     RequestManager manager;
 
-    public int count = 0;
     public int offset = 0;
     public String mainQuery = "";
 
@@ -80,9 +79,6 @@ public class SearchFragment extends Fragment {
 
         manager = new RequestManager(getActivity());
 
-        Random random = new Random();
-        offset = random.nextInt(50);
-
 
         manager.getRecipeList(recipeListListener,offset,10, mainQuery);
         manager.getAutoComplete(autoCompleteListener,"lasagna");
@@ -91,7 +87,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 offset += 10;
-                manager.getRecipeList(recipeListListener,offset, count,mainQuery);
+                manager.getRecipeList(recipeListListener,offset, 10,mainQuery);
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
@@ -104,7 +100,7 @@ public class SearchFragment extends Fragment {
                 if (offset != 0) {
                     offset -= 10;
                 }
-                manager.getRecipeList(recipeListListener,offset, count,mainQuery);
+                manager.getRecipeList(recipeListListener,offset, 10,mainQuery);
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
@@ -114,8 +110,6 @@ public class SearchFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                offset = 0;
-                offset = random.nextInt(50);
                 manager.getRecipeList(recipeListListener,offset,10,"");
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
@@ -154,7 +148,7 @@ public class SearchFragment extends Fragment {
                     recipeLayout.setVisibility(View.INVISIBLE);
                     recipePlaceHolder.setVisibility(View.VISIBLE);
                     recipePlaceHolder.startShimmer();
-                    manager.getRecipeList(recipeListListener,count,10,mainQuery);
+                    manager.getRecipeList(recipeListListener,offset,10,mainQuery);
 
                     searchView.hide();
                     // Perform your search logic here
