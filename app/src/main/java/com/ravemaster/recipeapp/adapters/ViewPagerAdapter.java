@@ -22,7 +22,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case 1:
                 return new SearchFragment();
             case 2:
-                return new OfflineFragment();
+                return new SettingsFragment();
             default:
                 return new FeedFragment();
         }
