@@ -1,11 +1,14 @@
 package com.ravemaster.recipeapp;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.ravemaster.recipeapp.adapters.SimilarAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
@@ -38,6 +42,8 @@ import com.ravemaster.recipeapp.api.getsimilarrecipes.interfaces.SimilarRecipeLi
 import com.ravemaster.recipeapp.api.getsimilarrecipes.models.Result;
 import com.ravemaster.recipeapp.api.getsimilarrecipes.models.SimilarRecipeApiResponse;
 import com.ravemaster.recipeapp.clickinterfaces.OnSimilarClicked;
+import com.ravemaster.recipeapp.utilities.Constants;
+import com.ravemaster.recipeapp.utilities.PreferenceManager;
 
 import java.util.ArrayList;
 
@@ -46,7 +52,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
     RequestManager manager;
     CardView goBack, save;
-    ImageView imgRecipe;
+    ImageView imgRecipe,imgSave;
     TextView name, servings, ratings, time, description, ingredients, instructions;
     ShimmerFrameLayout placeholder, similarPlaceHolder;
     LinearLayout layout, chartLayout, similarLayout;
@@ -63,6 +69,12 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
     String videoUrl;
 
+    PreferenceManager preferenceManager;
+
+    DBHelper helper;
+
+    ArrayList<Integer> ids = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +87,18 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         });
         initViews();
 
+        preferenceManager = new PreferenceManager(RecipeDetailsActivity.this);
+        helper = new DBHelper(RecipeDetailsActivity.this);
+
         Intent intent = getIntent();
         id = intent.getIntExtra("id",0);
 
         manager = new RequestManager(this);
         manager.getRecipeDetails(listener,id);
-        manager.getSimilarRecipes(similarRecipeListener,id);
 
         description.setTextIsSelectable(true);
+
+        ids = getIds();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -106,6 +122,23 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(RecipeDetailsActivity.this);
+                View view = LayoutInflater.from(RecipeDetailsActivity.this).inflate(R.layout.bottom_sheet_android,null);
+                RelativeLayout selectShare = view.findViewById(R.id.selectShare);
+                bottomSheetDialog.setContentView(view);
+                bottomSheetDialog.show();
+                selectShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(RecipeDetailsActivity.this, "Share will be implemented soon!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -318,6 +351,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             btnPlayButton.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    public ArrayList<Integer> getIds(){
+        Cursor cursor = helper.getIds();
+        ArrayList<Integer> integers = new ArrayList<>();
+        if (cursor.getCount() == 0){
+            Toast.makeText(RecipeDetailsActivity.this, "", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                int id = cursor.getInt(0);
+                integers.add(id);
+            }
+        }
+        cursor.close();
+        return integers;
     }
 
     private void initViews() {

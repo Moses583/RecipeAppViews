@@ -23,8 +23,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
                 return new SearchFragment();
             case 2:
                 return new OfflineFragment();
-            case 3:
-                return new SettingsFragment();
             default:
                 return new FeedFragment();
         }
@@ -32,6 +30,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 3;
     }
 }

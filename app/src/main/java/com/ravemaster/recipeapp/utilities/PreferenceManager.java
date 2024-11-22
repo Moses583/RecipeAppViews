@@ -30,6 +30,16 @@ public class PreferenceManager {
         return sharedPreferences.getString(key,null);
     }
 
+    public void putIsSaved(String key, boolean value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key,value);
+        editor.apply();
+    }
+
+    public Boolean getIsSaved(String key){
+        return sharedPreferences.getBoolean(key,false);
+    }
+
     public void clear(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();

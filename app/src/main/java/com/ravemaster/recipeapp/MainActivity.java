@@ -6,9 +6,6 @@ import android.view.MenuItem;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,11 +44,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.idSearch) {
                 viewPager2.setCurrentItem(1);
                 return true;
-            } else if (item.getItemId() == R.id.idLibrary) {
+            }  else if (item.getItemId() == R.id.idSettings) {
                 viewPager2.setCurrentItem(2);
-                return true;
-            } else if (item.getItemId() == R.id.idSettings) {
-                viewPager2.setCurrentItem(3);
                 return true;
             }
             return false;

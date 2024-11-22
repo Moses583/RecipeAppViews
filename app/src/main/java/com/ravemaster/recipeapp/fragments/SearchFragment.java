@@ -81,7 +81,7 @@ public class SearchFragment extends Fragment {
         offset = random.nextInt(50);
 
 
-        manager.getRecipeList(recipeListListener,offset,50, mainQuery);
+        manager.getRecipeList(recipeListListener,offset,2, mainQuery);
         manager.getAutoComplete(autoCompleteListener,"lasagna");
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -89,7 +89,7 @@ public class SearchFragment extends Fragment {
             public void onRefresh() {
                 offset = 0;
                 offset = random.nextInt(50);
-                manager.getRecipeList(recipeListListener,offset,50,"");
+                manager.getRecipeList(recipeListListener,offset,2,"");
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
@@ -127,7 +127,7 @@ public class SearchFragment extends Fragment {
                     recipeLayout.setVisibility(View.INVISIBLE);
                     recipePlaceHolder.setVisibility(View.VISIBLE);
                     recipePlaceHolder.startShimmer();
-                    manager.getRecipeList(recipeListListener,count,200,mainQuery);
+                    manager.getRecipeList(recipeListListener,count,2,mainQuery);
 
                     searchView.hide();
                     // Perform your search logic here
@@ -226,7 +226,7 @@ public class SearchFragment extends Fragment {
             recipeLayout.setVisibility(View.INVISIBLE);
             recipePlaceHolder.setVisibility(View.VISIBLE);
             recipePlaceHolder.startShimmer();
-            manager.getRecipeList(recipeListListener,0,200,result.display);
+            manager.getRecipeList(recipeListListener,0,2,result.display);
         }
     };
 
