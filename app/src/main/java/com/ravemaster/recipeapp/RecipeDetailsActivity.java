@@ -73,6 +73,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
 
     DBHelper helper;
+    String one = "";
+    String two = "";
+    String three = "";
+    String four = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +141,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 selectShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(RecipeDetailsActivity.this, "Share will be implemented soon!", Toast.LENGTH_SHORT).show();
+                        shareText("Recipe: "+one +"\n\n"+two+"\n\n"+"Ingredients\n"+three+"\n\n"+"Instructions\n"+four);
                     }
                 });
                 selectSave.setOnClickListener(new View.OnClickListener() {
@@ -279,7 +283,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 .load(response.thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(imgRecipe);
-        String name1 = response.name;
+        one = response.name;
         int positive = response.user_ratings.count_positive;
         int negative = response.user_ratings.count_negative;
         int total = positive + negative;
@@ -287,9 +291,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         String ratings1 = String.format("%.1f%%",percent);
         String time1 = String.valueOf(response.cook_time_minutes)+" min";
         String servings1 = String.valueOf(response.num_servings)+ " people";
-        String description1 = response.description;
+        two = response.description;
 
-        name.setText(name1);
+        name.setText(one);
         ratings.setText(ratings1);
         servings.setText(servings1);
 
@@ -299,10 +303,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             time.setText(time1);
         }
 
-        if (description1==null){
+        if (two==null){
             description.setText("Description unavailable");
         } else {
-            description.setText(description1);
+            description.setText(two);
         }
 
         ArrayList<Integer> positions = new ArrayList<>();
@@ -313,7 +317,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
 
         StringBuilder builder1 = new StringBuilder();
-        String ingredientItem = "";
         for (int i :
                 positions) {
             for (Component c :
@@ -321,8 +324,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 builder1.append("~ ").append(c.raw_text).append("\n");
             }
         }
-        ingredientItem = builder1.toString();
-        ingredients.setText(ingredientItem);
+        three = builder1.toString();
+        ingredients.setText(three);
 
         if (response.nutrition != null){
             chartLayout.setVisibility(View.VISIBLE);
@@ -354,20 +357,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
             chart.getDescription().setEnabled(false);
             chart.getLegend().setEnabled(true);
+            chart.getLegend().setTextColor(Color.YELLOW);
+            chart.setHoleColor(Color.TRANSPARENT);
             chart.animateY(1000);
             chart.invalidate();
         }
 
         StringBuilder builder2 = new StringBuilder();
-        String steps = "";
         int count = 1;
 
         for (Instruction i :
                 response.instructions) {
             builder2.append(String.valueOf(count++) +".\t").append(i.display_text).append("\n\n");
         }
-        steps = builder2.toString();
-        instructions.setText(steps);
+        four = builder2.toString();
+        instructions.setText(four);
 
         videoUrl = (String) response.video_url;
 
@@ -375,6 +379,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             btnPlayButton.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    public void shareText(String text) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+
+        // Create a chooser for the sharing options
+        Intent chooser = Intent.createChooser(shareIntent, "Share via");
+        startActivity(chooser);
     }
 
     private void initViews() {

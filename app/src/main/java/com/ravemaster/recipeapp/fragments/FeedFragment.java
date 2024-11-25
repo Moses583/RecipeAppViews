@@ -197,7 +197,7 @@ public class FeedFragment extends Fragment {
     };
 
     private void showData(FeedsApiResponse response) {
-        Glide.with(getActivity())
+        Glide.with(requireActivity())
                 .load(response.results.get(0).item.thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(imgFeature);

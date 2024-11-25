@@ -170,7 +170,7 @@ public class SearchFragment extends Fragment {
         @Override
         public void onResponse(RecipeListApiResponse response, String message) {
 
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
 
             swipeRefreshLayout.setRefreshing(false);
 
@@ -212,13 +212,12 @@ public class SearchFragment extends Fragment {
         @Override
         public void onResponse(AutoCompleteApiResponse response, String message) {
             showAutoCompleteRecycler(response);
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(String message) {
             if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
-                Toast.makeText(getActivity(), "Unavailable!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Unavailable!", Toast.LENGTH_SHORT).show();
             }
         }
 
