@@ -115,7 +115,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onRefresh() {
                 manager.getRecipeList(recipeListListener,offset,10,"");
-                recipeLayout.setVisibility(View.INVISIBLE);
+                recipeLayout.setVisibility(View.GONE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
                 lottie.setVisibility(View.INVISIBLE);
@@ -185,12 +185,10 @@ public class SearchFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
             recipePlaceHolder.stopShimmer();
             recipePlaceHolder.setVisibility(View.INVISIBLE);
-            recipeLayout.setVisibility(View.INVISIBLE);
-            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
-                Toast.makeText(requireActivity(), "Unable to load recipes", Toast.LENGTH_SHORT).show();
-                lottie.setVisibility(View.VISIBLE);
-                lottie.animate();
-            }
+            recipeLayout.setVisibility(View.GONE);
+            Toast.makeText(requireActivity(), "Unable to load recipes", Toast.LENGTH_SHORT).show();
+            lottie.setVisibility(View.VISIBLE);
+            lottie.animate();
         }
 
         @Override
@@ -215,9 +213,7 @@ public class SearchFragment extends Fragment {
 
         @Override
         public void onError(String message) {
-            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
-                Toast.makeText(requireActivity(), "Unavailable!", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(requireActivity(), "Unavailable!", Toast.LENGTH_SHORT).show();
         }
 
         @Override

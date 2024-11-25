@@ -107,13 +107,13 @@ public class FeedFragment extends Fragment {
                 lottie1.setVisibility(View.INVISIBLE);
                 lottie2.setVisibility(View.INVISIBLE);
                 manager.getFeedList(feedsListListener,false);
-                featureLayout.setVisibility(View.INVISIBLE);
+                featureLayout.setVisibility(View.GONE);
                 featurePlaceHolder.setVisibility(View.VISIBLE);
                 featurePlaceHolder.startShimmer();
-                mealPlanLayout.setVisibility(View.INVISIBLE);
+                mealPlanLayout.setVisibility(View.GONE);
                 mealPlanPlaceHolder.setVisibility(View.VISIBLE);
                 mealPlanPlaceHolder.startShimmer();
-                trendingLayout.setVisibility(View.INVISIBLE);
+                trendingLayout.setVisibility(View.GONE);
                 trendingPlaceHolder.setVisibility(View.VISIBLE);
                 trendingPlaceHolder.startShimmer();
             }
@@ -150,22 +150,20 @@ public class FeedFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
 
 
-            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
-                Toast.makeText(requireActivity(), "Unable to load recipes.", Toast.LENGTH_SHORT).show();
-                lottie.setVisibility(View.VISIBLE);
-                lottie.animate();
-                lottie1.setVisibility(View.VISIBLE);
-                lottie1.animate().setStartDelay(2500).setDuration(2500);
-                lottie2.setVisibility(View.VISIBLE);
-                lottie2.animate().setStartDelay(5000).setDuration(5000);
-            }
-            featureLayout.setVisibility(View.INVISIBLE);
+            Toast.makeText(requireActivity(), "Unable to load recipes.", Toast.LENGTH_SHORT).show();
+            lottie.setVisibility(View.VISIBLE);
+            lottie.animate();
+            lottie1.setVisibility(View.VISIBLE);
+            lottie1.animate().setStartDelay(2500).setDuration(2500);
+            lottie2.setVisibility(View.VISIBLE);
+            lottie2.animate().setStartDelay(5000).setDuration(5000);
+            featureLayout.setVisibility(View.GONE);
             featurePlaceHolder.stopShimmer();
             featurePlaceHolder.setVisibility(View.INVISIBLE);
-            mealPlanLayout.setVisibility(View.INVISIBLE);
+            mealPlanLayout.setVisibility(View.GONE);
             mealPlanPlaceHolder.stopShimmer();
             mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
-            trendingLayout.setVisibility(View.INVISIBLE);
+            trendingLayout.setVisibility(View.GONE);
             trendingPlaceHolder.stopShimmer();
             trendingPlaceHolder.setVisibility(View.INVISIBLE);
 

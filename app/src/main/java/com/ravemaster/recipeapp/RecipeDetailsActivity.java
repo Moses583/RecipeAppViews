@@ -114,7 +114,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 similarPlaceHolder.setVisibility(View.VISIBLE);
                 similarPlaceHolder.startShimmer();
 
-                layout.setVisibility(View.INVISIBLE);
+                layout.setVisibility(View.GONE);
                 placeholder.setVisibility(View.VISIBLE);
                 placeholder.startShimmer();
 
@@ -255,11 +255,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             placeholder.setVisibility(View.INVISIBLE);
             layout.setVisibility(View.INVISIBLE);
             description.setText(message);
-            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
-                Toast.makeText(RecipeDetailsActivity.this, "Unable to show details", Toast.LENGTH_SHORT).show();
-                lottie.setVisibility(View.VISIBLE);
-                lottie.animate();
-            }
+            Toast.makeText(RecipeDetailsActivity.this, "Unable to show details", Toast.LENGTH_SHORT).show();
+            lottie.setVisibility(View.VISIBLE);
+            lottie.animate();
         }
 
         @Override
