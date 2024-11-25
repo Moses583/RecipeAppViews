@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.api.getfeed.models.Item2;
 import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
@@ -83,7 +84,7 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.Trendi
 
         ImageView imageView;
         TextView name, time, ratings;
-        CardView cardView;
+        MaterialCardView cardView;
         public TrendingViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imgTrending);

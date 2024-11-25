@@ -3,4 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
+    <color name="pink1">#FF0A54</color>
+    <color name="pink2">#FF477E</color>
+    <color name="pink3">#FF5C8A</color>
+    <color name="pink4">#FF7096</color>
+    <color name="pink5">#FF85A1</color>
+    <color name="pink6">#FF99AC</color>
+    <color name="pink7">#FBB1BD</color>
+    <color name="pink8">#F9BEC7</color>
+    <color name="pink9">#F7CAD0</color>
+    <color name="pink10">#FAE0E4</color>
 </resources>

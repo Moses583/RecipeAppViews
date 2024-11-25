@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.api.getrecipelist.models.Result;
 import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
@@ -84,7 +85,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         ImageView imageView;
         TextView name, time, ratings;
-        CardView cardView;
+        MaterialCardView cardView;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imgRecipe);

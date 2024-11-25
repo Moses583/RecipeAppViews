@@ -170,8 +170,6 @@ public class SearchFragment extends Fragment {
         @Override
         public void onResponse(RecipeListApiResponse response, String message) {
 
-            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
-
             swipeRefreshLayout.setRefreshing(false);
 
             recipePlaceHolder.stopShimmer();
@@ -189,6 +187,7 @@ public class SearchFragment extends Fragment {
             recipePlaceHolder.setVisibility(View.INVISIBLE);
             recipeLayout.setVisibility(View.INVISIBLE);
             if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                Toast.makeText(requireActivity(), "Unable to load recipes", Toast.LENGTH_SHORT).show();
                 lottie.setVisibility(View.VISIBLE);
                 lottie.animate();
             }

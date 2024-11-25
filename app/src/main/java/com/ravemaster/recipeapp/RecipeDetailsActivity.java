@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.ravemaster.recipeapp.adapters.SimilarAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
@@ -255,6 +256,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             layout.setVisibility(View.INVISIBLE);
             description.setText(message);
             if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                Toast.makeText(RecipeDetailsActivity.this, "Unable to show details", Toast.LENGTH_SHORT).show();
                 lottie.setVisibility(View.VISIBLE);
                 lottie.animate();
             }
@@ -357,7 +359,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
             chart.getDescription().setEnabled(false);
             chart.getLegend().setEnabled(true);
-            chart.getLegend().setTextColor(Color.YELLOW);
+            chart.getLegend().setTextColor(Color.GREEN);
             chart.setHoleColor(Color.TRANSPARENT);
             chart.animateY(1000);
             chart.invalidate();

@@ -151,6 +151,7 @@ public class FeedFragment extends Fragment {
 
 
             if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                Toast.makeText(requireActivity(), "Unable to load recipes.", Toast.LENGTH_SHORT).show();
                 lottie.setVisibility(View.VISIBLE);
                 lottie.animate();
                 lottie1.setVisibility(View.VISIBLE);
