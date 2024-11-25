@@ -25,6 +25,8 @@ firebaseDatabase = "21.0.0"
 firebaseFirestore = "25.1.1"
 splashVersion = "1.0.1"
 
+lottieVersion = "6.6.0"
+
 
 
 [libraries]
@@ -53,6 +55,8 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashVersion" }
+
+lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottieVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

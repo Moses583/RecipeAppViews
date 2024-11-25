@@ -41,7 +41,7 @@ public class RequestManager {
         listener.onLoading(true);
 
         GetFeed getFeed = retrofit.create(GetFeed.class);
-        Call<FeedsApiResponse> call = getFeed.getFeedList(5,"+0700",vegetarian,0,"cee03e6aabmsh2fa043ef9ad519ap17e59bjsn695eb9e6b3fb","tasty.p.rapidapi.com");
+        Call<FeedsApiResponse> call = getFeed.getFeedList(5,"+0700",vegetarian,0,"9514810a91mshaa1e82f038a194dp192b4djsn80ef1486dc10","tasty.p.rapidapi.com");
         call.enqueue(new Callback<FeedsApiResponse>() {
             @Override
             public void onResponse(Call<FeedsApiResponse> call, Response<FeedsApiResponse> response) {
@@ -65,7 +65,7 @@ public class RequestManager {
     public void getRecipeList(RecipeListListener listener, int from, int size, String query){
         listener.onLoading(true);
         GetRecipeList getRecipeList = retrofit.create(GetRecipeList.class);
-        Call<RecipeListApiResponse> call = getRecipeList.getRecipeList(from,size,query,"cee03e6aabmsh2fa043ef9ad519ap17e59bjsn695eb9e6b3fb","tasty.p.rapidapi.com");
+        Call<RecipeListApiResponse> call = getRecipeList.getRecipeList(from,size,query,"9514810a91mshaa1e82f038a194dp192b4djsn80ef1486dc10","tasty.p.rapidapi.com");
         call.enqueue(new Callback<RecipeListApiResponse>() {
             @Override
             public void onResponse(Call<RecipeListApiResponse> call, Response<RecipeListApiResponse> response) {
@@ -88,7 +88,7 @@ public class RequestManager {
     public void getRecipeDetails(RecipeDetailsListener listener, int id){
         listener.onLoading(true);
         GetRecipeDetails getDetails = retrofit.create(GetRecipeDetails.class);
-        Call<RecipeDetailApiResponse> call = getDetails.getDetails(id,"cee03e6aabmsh2fa043ef9ad519ap17e59bjsn695eb9e6b3fb","tasty.p.rapidapi.com");
+        Call<RecipeDetailApiResponse> call = getDetails.getDetails(id,"9514810a91mshaa1e82f038a194dp192b4djsn80ef1486dc10","tasty.p.rapidapi.com");
         call.enqueue(new Callback<RecipeDetailApiResponse>() {
             @Override
             public void onResponse(Call<RecipeDetailApiResponse> call, Response<RecipeDetailApiResponse> response) {
@@ -110,7 +110,7 @@ public class RequestManager {
     public void getSimilarRecipes(SimilarRecipeListener listener, int id){
         listener.onLoading(true);
         GetSimilarRecipes getSimilarRecipes = retrofit.create(GetSimilarRecipes.class);
-        Call<SimilarRecipeApiResponse> call = getSimilarRecipes.getSimilarRecipes(id,"cee03e6aabmsh2fa043ef9ad519ap17e59bjsn695eb9e6b3fb","tasty.p.rapidapi.com");
+        Call<SimilarRecipeApiResponse> call = getSimilarRecipes.getSimilarRecipes(id,"9514810a91mshaa1e82f038a194dp192b4djsn80ef1486dc10","tasty.p.rapidapi.com");
         call.enqueue(new Callback<SimilarRecipeApiResponse>() {
             @Override
             public void onResponse(Call<SimilarRecipeApiResponse> call, Response<SimilarRecipeApiResponse> response) {

@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.carousel.MaskableFrameLayout;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.api.getsimilarrecipes.models.Result;
 import com.ravemaster.recipeapp.clickinterfaces.OnSimilarClicked;
@@ -46,25 +47,9 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.SimilarV
                 .into(holder.imageView);
 
         String name = arrayList.get(holder.getAdapterPosition()).name;
-        String time = String.valueOf(arrayList.get(holder.getAdapterPosition()).cook_time_minutes);
-
-        int positive = arrayList.get(holder.getAdapterPosition()).user_ratings.count_positive;
-        int negative = arrayList.get(holder.getAdapterPosition()).user_ratings.count_negative;
-
-        int total = positive + negative;
-
-        double percent = ((double) positive/ total)*100;
-
-        String rating = String.format("%.1f%%",percent);
 
         holder.name.setText(name);
         holder.name.setSelected(true);
-        if (time.equals("0")){
-            holder.time.setText("60 min");
-        } else {
-            holder.time.setText(time+" min");
-        }
-        holder.ratings.setText(rating);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,13 +68,11 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.SimilarV
 
         ImageView imageView;
         TextView name, time, ratings;
-        CardView cardView;
+        MaskableFrameLayout cardView;
         public SimilarViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imgSimilar);
             name = itemView.findViewById(R.id.txtSimilarName);
-            time = itemView.findViewById(R.id.txtSimilarTime);
-            ratings = itemView.findViewById(R.id.txtSimilarRating);
             cardView = itemView.findViewById(R.id.similarCardView);
         }
     }

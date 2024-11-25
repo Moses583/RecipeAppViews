@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecipeDetailsActivity">
+    tools:context=".RecipeDetailsActivity"
+    android:fitsSystemWindows="true">
 
     <androidx.cardview.widget.CardView
         android:layout_width="40dp"
@@ -74,6 +75,16 @@
             android:id="@+id/detailLayout">
             <include layout="@layout/recipe_details_layout"/>
         </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/empty"
+            android:visibility="invisible"
+            android:id="@+id/noInternetAnimation4"/>
+
     </RelativeLayout>
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"

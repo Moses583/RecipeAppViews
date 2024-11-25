@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.ravemaster.recipeapp.R;
@@ -45,6 +47,8 @@ public class FeedFragment extends Fragment {
     RecyclerView mealPlanRecycler,trendingRecycler;
 
     SwipeRefreshLayout swipeRefreshLayout;
+
+    LottieAnimationView lottie,lottie1,lottie2;
 
     RequestManager manager;
     MealPlanAdapter mealPlanAdapter;
@@ -77,15 +81,13 @@ public class FeedFragment extends Fragment {
         manager = new RequestManager(getActivity());
         preferenceManager = new PreferenceManager(getActivity());
 
-        txtUsername.setText("Hello "+preferenceManager.getString(Constants.KEY_NAME));
-
-        if (preferenceManager.getString(Constants.KEY_IMAGE).equals("")){
-            userProfile.setBackgroundResource(R.drawable.img);
-        } else {
-            byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-            userProfile.setImageBitmap(bitmap);
-        }
+//        if (preferenceManager.getString(Constants.KEY_IMAGE).equals("")){
+//            userProfile.setBackgroundResource(R.drawable.img);
+//        } else {
+//            byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//            userProfile.setImageBitmap(bitmap);
+//        }
 
         manager.getFeedList(feedsListListener,false);
 
@@ -101,6 +103,9 @@ public class FeedFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                lottie.setVisibility(View.INVISIBLE);
+                lottie1.setVisibility(View.INVISIBLE);
+                lottie2.setVisibility(View.INVISIBLE);
                 manager.getFeedList(feedsListListener,false);
                 featureLayout.setVisibility(View.INVISIBLE);
                 featurePlaceHolder.setVisibility(View.VISIBLE);
@@ -124,10 +129,16 @@ public class FeedFragment extends Fragment {
 
             featurePlaceHolder.stopShimmer();
             featurePlaceHolder.setVisibility(View.INVISIBLE);
+            featureLayout.setVisibility(View.VISIBLE);
             mealPlanPlaceHolder.stopShimmer();
             mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
+            mealPlanLayout.setVisibility(View.VISIBLE);
             trendingPlaceHolder.stopShimmer();
             trendingPlaceHolder.setVisibility(View.INVISIBLE);
+            trendingLayout.setVisibility(View.VISIBLE);
+            lottie.setVisibility(View.INVISIBLE);
+            lottie1.setVisibility(View.INVISIBLE);
+            lottie2.setVisibility(View.INVISIBLE);
 
             showData(response);
 
@@ -138,13 +149,22 @@ public class FeedFragment extends Fragment {
 
             swipeRefreshLayout.setRefreshing(false);
 
-            if (message.contains("timeout")){
-            }
 
+            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                lottie.setVisibility(View.VISIBLE);
+                lottie.animate();
+                lottie1.setVisibility(View.VISIBLE);
+                lottie1.animate().setStartDelay(2500).setDuration(2500);
+                lottie2.setVisibility(View.VISIBLE);
+                lottie2.animate().setStartDelay(5000).setDuration(5000);
+            }
+            featureLayout.setVisibility(View.INVISIBLE);
             featurePlaceHolder.stopShimmer();
             featurePlaceHolder.setVisibility(View.INVISIBLE);
+            mealPlanLayout.setVisibility(View.INVISIBLE);
             mealPlanPlaceHolder.stopShimmer();
             mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
+            trendingLayout.setVisibility(View.INVISIBLE);
             trendingPlaceHolder.stopShimmer();
             trendingPlaceHolder.setVisibility(View.INVISIBLE);
 
@@ -214,13 +234,15 @@ public class FeedFragment extends Fragment {
         trendingAdapter = new TrendingAdapter(getActivity(),response.results.get(5).items,onTrendingClicked);
         trendingRecycler.setAdapter(trendingAdapter);
         trendingRecycler.setHasFixedSize(true);
-        trendingRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        trendingRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
     }
 
     private void showMealPlanAdapter(FeedsApiResponse response) {
         txtMealPlanTitle.setText(response.results.get(3).name);
         mealPlanAdapter = new MealPlanAdapter(getActivity(),response.results.get(3).items,onMealPlanClicked);
         mealPlanRecycler.setAdapter(mealPlanAdapter);
+        mealPlanRecycler.setLayoutManager(new GridLayoutManager(requireActivity(),2));
+        mealPlanRecycler.setHasFixedSize(true);
     }
 
     private final OnMealPlanClicked onMealPlanClicked = new OnMealPlanClicked() {
@@ -259,5 +281,8 @@ public class FeedFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.feedRefresh);
         txtUsername = view.findViewById(R.id.txtUsername);
         userProfile = view.findViewById(R.id.userImage);
+        lottie = view.findViewById(R.id.noInternetAnimation);
+        lottie1 = view.findViewById(R.id.noInternetAnimation1);
+        lottie2 = view.findViewById(R.id.noInternetAnimation2);
     }
 }

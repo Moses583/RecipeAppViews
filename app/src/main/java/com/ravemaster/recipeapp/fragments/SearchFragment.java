@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.search.SearchBar;
@@ -45,6 +46,7 @@ public class SearchFragment extends Fragment {
     public LinearLayout recipeLayout;
     SearchBar searchBar;
     SearchView searchView;
+    LottieAnimationView lottie;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -91,6 +93,7 @@ public class SearchFragment extends Fragment {
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
+                lottie.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -104,6 +107,7 @@ public class SearchFragment extends Fragment {
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
+                lottie.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -114,6 +118,7 @@ public class SearchFragment extends Fragment {
                 recipeLayout.setVisibility(View.INVISIBLE);
                 recipePlaceHolder.setVisibility(View.VISIBLE);
                 recipePlaceHolder.startShimmer();
+                lottie.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -165,10 +170,14 @@ public class SearchFragment extends Fragment {
         @Override
         public void onResponse(RecipeListApiResponse response, String message) {
 
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
             swipeRefreshLayout.setRefreshing(false);
 
             recipePlaceHolder.stopShimmer();
             recipePlaceHolder.setVisibility(View.INVISIBLE);
+            recipeLayout.setVisibility(View.VISIBLE);
+            lottie.setVisibility(View.INVISIBLE);
 
             showData(response);
         }
@@ -178,8 +187,10 @@ public class SearchFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
             recipePlaceHolder.stopShimmer();
             recipePlaceHolder.setVisibility(View.INVISIBLE);
-            if (message.contains("timeout")){
-                Toast.makeText(getActivity(), "Please check your connection and try again", Toast.LENGTH_LONG).show();
+            recipeLayout.setVisibility(View.INVISIBLE);
+            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                lottie.setVisibility(View.VISIBLE);
+                lottie.animate();
             }
         }
 
@@ -201,10 +212,14 @@ public class SearchFragment extends Fragment {
         @Override
         public void onResponse(AutoCompleteApiResponse response, String message) {
             showAutoCompleteRecycler(response);
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(String message) {
+            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                Toast.makeText(getActivity(), "Unavailable!", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
@@ -260,5 +275,6 @@ public class SearchFragment extends Fragment {
         searchView = view.findViewById(R.id.mySearchView);
         btnNext = view.findViewById(R.id.btnNext);
         btnPrev = view.findViewById(R.id.btnPrev);
+        lottie = view.findViewById(R.id.noInternetAnimation3);
     }
 }

@@ -27,12 +27,8 @@
                         android:layout_height="match_parent"
                         android:id="@+id/imgRecipeDetails"
                         android:src="@drawable/placeholder"
-                        android:scaleType="centerCrop"/>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/gradient_drawable"/>
+                        android:scaleType="centerCrop"
+                        android:layout_margin="10dp"/>
                 </FrameLayout>
 
                 <TextView

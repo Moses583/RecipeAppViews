@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.RecipeApp.MySplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#FFFFFF</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/final_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/chef_icon</item>
         <item name="postSplashScreenTheme">@style/Base.Theme.RecipeApp</item>
     </style>
 </resources>

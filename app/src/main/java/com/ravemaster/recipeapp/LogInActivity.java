@@ -52,11 +52,11 @@ public class LogInActivity extends AppCompatActivity {
 
         preferenceManager = new PreferenceManager(this);
 
-        if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)){
-            Intent intent = new Intent(LogInActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+//        if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)){
+//            Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
 
         initViews();
 

@@ -14,30 +14,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtUsername"
-                android:text="Hello username"
+                android:text="Hello there👋"
                 android:textStyle="bold"
                 android:layout_margin="10dp"
-                android:layout_toEndOf="@id/theCard"
+                android:layout_toEndOf="@id/userImage"
                 android:layout_centerVertical="true"/>
 
-            <androidx.cardview.widget.CardView
+            <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:cardCornerRadius="25dp"
+                android:id="@+id/userImage"
                 android:layout_margin="10dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:id="@+id/theCard">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#DDDDDD">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/userImage"/>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+                android:src="@drawable/chef_icon"/>
         </RelativeLayout>
 
         <TextView
@@ -95,6 +83,15 @@
                             <include layout="@layout/feature_item"/>
                         </LinearLayout>
 
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_centerInParent="true"
+                            app:lottie_autoPlay="true"
+                            app:lottie_rawRes="@raw/empty"
+                            android:visibility="invisible"
+                            android:id="@+id/noInternetAnimation"/>
+
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -134,6 +131,16 @@
                             android:id="@+id/mealPlanLayout">
                             <include layout="@layout/meal_plan_layout"/>
                         </LinearLayout>
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_centerInParent="true"
+                            app:lottie_autoPlay="true"
+                            app:lottie_rawRes="@raw/empty"
+                            android:visibility="invisible"
+                            android:id="@+id/noInternetAnimation1"/>
+
                     </RelativeLayout>
 
                     <TextView
@@ -165,6 +172,16 @@
                             android:id="@+id/trendingLayout">
                             <include layout="@layout/trending_recipes" />
                         </LinearLayout>
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_centerInParent="true"
+                            app:lottie_autoPlay="true"
+                            app:lottie_rawRes="@raw/empty"
+                            android:visibility="invisible"
+                            android:id="@+id/noInternetAnimation2"/>
+
                     </RelativeLayout>
                 </LinearLayout>
             </ScrollView>

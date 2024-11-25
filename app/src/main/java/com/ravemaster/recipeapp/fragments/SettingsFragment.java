@@ -1,5 +1,9 @@
 package com.ravemaster.recipeapp.fragments;
 
+import static android.content.Intent.getIntent;
+
+import static androidx.core.app.ActivityCompat.finishAffinity;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.ravemaster.recipeapp.LogInActivity;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.TestActivity;
 import com.ravemaster.recipeapp.utilities.Constants;
@@ -41,6 +46,7 @@ public class SettingsFragment extends Fragment {
 
     MaterialSwitch materialSwitch;
     TextView txtTheme;
+    Button btnLogOut;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -95,19 +101,26 @@ public class SettingsFragment extends Fragment {
                 if (isChecked){
                     preferenceManager.isDarkTheme(Constants.IS_DARK_THEME,true);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    getActivity().recreate();
+                    restartApp();
                     txtTheme.setText("Dark theme selected");
                     Toast.makeText(getActivity(), "Dark theme selected", Toast.LENGTH_SHORT).show();
                 } else {
                     preferenceManager.isDarkTheme(Constants.IS_DARK_THEME,false);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    getActivity().recreate();
+                    restartApp();
                     txtTheme.setText("Light theme selected");
                     Toast.makeText(getActivity(), "Light theme selected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         return view;
+    }
+
+    public void restartApp() {
+        Intent intent = requireActivity().getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        requireActivity().startActivity(intent);
+        requireActivity().finishAffinity();
     }
 
     private void initViews(View view) {

@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.splashscreen)
 
+    implementation(libs.lottie)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.github.mikephil.charting.charts.PieChart;
@@ -55,6 +56,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     ShimmerFrameLayout placeholder, similarPlaceHolder;
     LinearLayout layout, chartLayout, similarLayout;
     RecyclerView recyclerView;
+
+    LottieAnimationView lottie;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -110,6 +113,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 placeholder.setVisibility(View.VISIBLE);
                 placeholder.startShimmer();
 
+                lottie.setVisibility(View.INVISIBLE);
+
             }
         });
 
@@ -163,7 +168,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         String s4 = instructions.getText().toString();
         boolean insertData = helper.insertData(s1,s2,s3,s4);
         if (insertData){
-            Toast.makeText(RecipeDetailsActivity.this, "Added to library successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RecipeDetailsActivity.this, "Added to offline library.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(RecipeDetailsActivity.this, "Unable to add to library.", Toast.LENGTH_SHORT).show();
         }
@@ -177,6 +182,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
             similarPlaceHolder.stopShimmer();
             similarPlaceHolder.setVisibility(View.INVISIBLE);
+            similarLayout.setVisibility(View.VISIBLE);
 
             showSimilarRecipes(response);
         }
@@ -188,9 +194,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
             similarPlaceHolder.stopShimmer();
             similarPlaceHolder.setVisibility(View.INVISIBLE);
+            similarLayout.setVisibility(View.INVISIBLE);
 
-            if (message.contains("timeout")){
-                Toast.makeText(RecipeDetailsActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                Toast.makeText(RecipeDetailsActivity.this, "Unable to similar recipes!", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -213,8 +220,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private void showSimilarRecipes(SimilarRecipeApiResponse response) {
         similarAdapter = new SimilarAdapter(this,response.results,similarClicked);
         recyclerView.setAdapter(similarAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
-        recyclerView.setHasFixedSize(true);
     }
 
     private final OnSimilarClicked similarClicked = new OnSimilarClicked() {
@@ -233,6 +238,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             swipeRefreshLayout.setRefreshing(false);
             placeholder.stopShimmer();
             placeholder.setVisibility(View.INVISIBLE);
+            layout.setVisibility(View.VISIBLE);
+            lottie.setVisibility(View.INVISIBLE);
             showData(response);
         }
 
@@ -241,9 +248,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             swipeRefreshLayout.setRefreshing(false);
             placeholder.stopShimmer();
             placeholder.setVisibility(View.INVISIBLE);
+            layout.setVisibility(View.INVISIBLE);
             description.setText(message);
-            if (message.contains("timeout")){
-                Toast.makeText(RecipeDetailsActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+            if (message.contains("timeout")||message.contains("429")||message.contains("unable")){
+                lottie.setVisibility(View.VISIBLE);
+                lottie.animate();
             }
         }
 
@@ -395,5 +404,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         btnPlayButton = findViewById(R.id.btnPlayVideo);
 
         swipeRefreshLayout = findViewById(R.id.recipeRefresh);
+
+        lottie = findViewById(R.id.noInternetAnimation4);
     }
 }

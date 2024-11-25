@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -43,9 +44,31 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPl
                 .load(urls.get(position).thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.imageView);
-        holder.mealPlanName.setText(urls.get(position).name);
+        holder.name.setText(urls.get(position).name);
 
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        String time = String.valueOf(urls.get(holder.getAdapterPosition()).cook_time_minutes);
+
+        int positive = urls.get(position).user_ratings.count_positive;
+        int negative = urls.get(position).user_ratings.count_negative;
+
+        int total = positive + negative;
+
+        double percent = ((double) positive/ total)*100;
+
+        String rating = String.format("%.1f%%",percent);
+
+        holder.name.setText(urls.get(position).name);
+        holder.name.setSelected(true);
+        if (time.equals("0")){
+            holder.time.setText("60 min");
+        } else {
+            holder.time.setText(time+" min");
+        }
+        holder.time.setSelected(true);
+        holder.ratings.setText(rating);
+        holder.ratings.setSelected(true);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onMealPlanClicked.moveToRecipeDetails(urls.get(position));
@@ -61,11 +84,15 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPl
 
     public static class MealPlanViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView mealPlanName;
+        TextView name, time, ratings;
+        CardView cardView;
         public MealPlanViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.meal_plan_image);
-            mealPlanName = itemView.findViewById(R.id.txtMealPlanName);
+            imageView = itemView.findViewById(R.id.imgMealPlan);
+            name = itemView.findViewById(R.id.txtMealPlanName);
+            time = itemView.findViewById(R.id.txtMealPlanTime);
+            ratings = itemView.findViewById(R.id.txtMealPlanRating);
+            cardView = itemView.findViewById(R.id.MealPlanCardView);
         }
     }
 }

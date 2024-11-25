@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.ravemaster.recipeapp.LibraryActivity;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.adapters.LibraryAdapter;
@@ -44,6 +45,8 @@ public class OfflineFragment extends Fragment {
 
     LibraryAdapter adapter;
 
+    LottieAnimationView lottie;
+
     public OfflineFragment() {
         // Required empty public constructor
     }
@@ -74,8 +77,6 @@ public class OfflineFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         helper = new DBHelper(getActivity());
-
-        adapter = new LibraryAdapter(getActivity(),getRecipes(),onLibraryClicked);
     }
 
     @Override
@@ -123,8 +124,10 @@ public class OfflineFragment extends Fragment {
         Cursor cursor = helper.getRecipes();
         ArrayList<RecipePojo> pojos = new ArrayList<>();
         if (cursor.getCount() == 0){
-            Toast.makeText(getActivity(), "Library empty", Toast.LENGTH_SHORT).show();
+            lottie.setVisibility(View.VISIBLE);
+            lottie.animate();
         } else {
+            lottie.setVisibility(View.INVISIBLE);
             while (cursor.moveToNext()){
                 String name = cursor.getString(1);
                 String description = cursor.getString(2);
@@ -138,5 +141,6 @@ public class OfflineFragment extends Fragment {
 
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.libraryRecycler);
+        lottie = view.findViewById(R.id.noInternetAnimation6);
     }
 }
