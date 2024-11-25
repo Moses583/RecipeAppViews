@@ -205,7 +205,6 @@ public class SearchFragment extends Fragment {
 
         @Override
         public void onError(String message) {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
 
         @Override

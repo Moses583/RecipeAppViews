@@ -3,15 +3,22 @@ package com.ravemaster.recipeapp.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.TestActivity;
+import com.ravemaster.recipeapp.utilities.Constants;
+import com.ravemaster.recipeapp.utilities.PreferenceManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +28,7 @@ import com.ravemaster.recipeapp.TestActivity;
 public class SettingsFragment extends Fragment {
 
     Button button;
+    PreferenceManager preferenceManager;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +38,9 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    MaterialSwitch materialSwitch;
+    TextView txtTheme;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -67,7 +78,41 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        initViews(view);
+        preferenceManager = new PreferenceManager(getActivity());
+
+        boolean isDarkTheme = preferenceManager.getIsDarkTheme(Constants.IS_DARK_THEME);
+        materialSwitch.setChecked(isDarkTheme);
+        if (isDarkTheme){
+            txtTheme.setText("Dark theme selected");
+        } else {
+            txtTheme.setText("Light theme selected");
+        }
+
+        materialSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    preferenceManager.isDarkTheme(Constants.IS_DARK_THEME,true);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    getActivity().recreate();
+                    txtTheme.setText("Dark theme selected");
+                    Toast.makeText(getActivity(), "Dark theme selected", Toast.LENGTH_SHORT).show();
+                } else {
+                    preferenceManager.isDarkTheme(Constants.IS_DARK_THEME,false);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    getActivity().recreate();
+                    txtTheme.setText("Light theme selected");
+                    Toast.makeText(getActivity(), "Light theme selected", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return view;
+    }
+
+    private void initViews(View view) {
+        materialSwitch = view.findViewById(R.id.switchTheme);
+        txtTheme = view.findViewById(R.id.txtTheme);
     }
 
 

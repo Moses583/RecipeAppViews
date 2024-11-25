@@ -30,13 +30,13 @@ public class PreferenceManager {
         return sharedPreferences.getString(key,null);
     }
 
-    public void putIsSaved(String key, boolean value){
+    public void isDarkTheme(String key, boolean value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(key,value);
         editor.apply();
     }
 
-    public Boolean getIsSaved(String key){
+    public Boolean getIsDarkTheme(String key){
         return sharedPreferences.getBoolean(key,false);
     }
 

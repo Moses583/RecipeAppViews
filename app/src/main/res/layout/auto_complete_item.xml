@@ -15,8 +15,7 @@
         android:id="@+id/txtAutoComplete"
         android:layout_alignParentStart="true"
         android:layout_margin="10dp"
-        android:layout_centerVertical="true"
-        android:textColor="@color/black"/>
+        android:layout_centerVertical="true"/>
 
 
 </RelativeLayout>

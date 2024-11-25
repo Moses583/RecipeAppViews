@@ -91,6 +91,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         manager = new RequestManager(this);
         manager.getRecipeDetails(listener,id);
+        manager.getSimilarRecipes(similarRecipeListener,id);
 
         description.setTextIsSelectable(true);
 

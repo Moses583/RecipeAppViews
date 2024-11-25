@@ -1,5 +1,6 @@
 package com.ravemaster.recipeapp.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,6 +51,7 @@ public class FeedFragment extends Fragment {
     TrendingAdapter trendingAdapter;
     PreferenceManager preferenceManager;
     public int id = 0;
+    private Context context;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -137,7 +139,6 @@ public class FeedFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
 
             if (message.contains("timeout")){
-                Toast.makeText(getActivity(), "Please check your connection and try again", Toast.LENGTH_LONG).show();
             }
 
             featurePlaceHolder.stopShimmer();

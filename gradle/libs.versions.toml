@@ -23,6 +23,7 @@ media3Version = "1.4.1"
 googleGmsGoogleServices = "4.4.2"
 firebaseDatabase = "21.0.0"
 firebaseFirestore = "25.1.1"
+splashVersion = "1.0.1"
 
 
 
@@ -50,6 +51,8 @@ media3UI = {group = "androidx.media3", name = "media3-ui", version.ref= "media3V
 media3HLS = {group = "androidx.media3", name = "media3-exoplayer-hls", version.ref= "media3Version"}
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+
+splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

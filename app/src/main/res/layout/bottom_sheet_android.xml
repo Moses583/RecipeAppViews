@@ -33,8 +33,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_centerVertical="true"
-            android:textColor="@color/black"/>
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -61,7 +60,6 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_centerVertical="true"
-            android:textColor="@color/black"/>
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 </LinearLayout>

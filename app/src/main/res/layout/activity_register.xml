@@ -30,7 +30,6 @@
                 android:text="Create your account."
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
                 android:gravity="center"
                 android:layout_margin="10dp"
                 android:padding="10dp"

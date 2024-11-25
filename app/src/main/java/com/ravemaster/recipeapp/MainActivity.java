@@ -39,15 +39,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             if (item.getItemId() == R.id.idHome){
+                item.setCheckable(true);
+                item.setEnabled(true);
+                item.setChecked(true);
                 viewPager2.setCurrentItem(0);
                 return true;
             } else if (item.getItemId() == R.id.idSearch) {
+                item.setCheckable(true);
+                item.setEnabled(true);
+                item.setChecked(true);
                 viewPager2.setCurrentItem(1);
                 return true;
             }  else if (item.getItemId() == R.id.idLibrary) {
+                item.setCheckable(true);
+                item.setEnabled(true);
+                item.setChecked(true);
                 viewPager2.setCurrentItem(2);
                 return true;
             } else if (item.getItemId() == R.id.idSettings) {
+                item.setCheckable(true);
+                item.setEnabled(true);
+                item.setChecked(true);
                 viewPager2.setCurrentItem(3);
                 return true;
             }

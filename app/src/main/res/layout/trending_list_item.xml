@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="18sp"
             android:id="@+id/txtTrendingName"

@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.splashscreen)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
