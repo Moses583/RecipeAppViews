@@ -1,28 +1,10 @@
 package com.ravemaster.recipeapp.api.getfeed.models;
 
+import com.ravemaster.recipeapp.api.getsimilarrecipes.models.Brand;
+
 import java.util.ArrayList;
 
-public class Item2 {
-    public int id;
-    public String username;
-    public String first_name;
-    public String last_name;
-    public String picture_url;
-    public ArrayList<String> specialty_tags;
-    public Object user_id;
-    public String name;
-    public String description;
-    public String type;
-    public Object brand_id;
-    public boolean is_free;
-    public String draft_status;
-    public Object start_date;
-    public Object end_date;
-    public int created_at;
-    public int updated_at;
-    public int num_items;
-    public ArrayList<String> thumbnail_urls;
-    public ArrayList<Credit> credits;
+public class Item3 {
     public String nutrition_visibility;
     public String country;
     public ArrayList<Instruction> instructions;
@@ -32,32 +14,40 @@ public class Item2 {
     public String seo_path;
     public UserRatings user_ratings;
     public Price price;
-    public Object brand;
+    public int id;
+    public Brand brand;
     public String slug;
     public String servings_noun_singular;
     public int show_id;
     public int prep_time_minutes;
     public boolean is_subscriber_content;
     public ArrayList<Section> sections;
+    public int brand_id;
     public ArrayList<Tag> tags;
     public Nutrition nutrition;
     public boolean is_app_only;
-    public ArrayList<Compilation> compilations;
+    public String name;
+    public ArrayList<Object> compilations;
     public int num_servings;
-    public int buzz_id;
+    public Object buzz_id;
     public boolean tips_and_ratings_enabled;
     public String aspect_ratio;
     public Show show;
-    public String inspired_by_url;
+    public int created_at;
+    public String description;
+    public String draft_status;
+    public Object inspired_by_url;
     public String thumbnail_url;
     public String thumbnail_alt_text;
     public int total_time_minutes;
     public String video_url;
+    public int updated_at;
+    public ArrayList<Credit> credits;
     public int approved_at;
     public boolean is_one_top;
     public String servings_noun_plural;
     public ArrayList<Rendition> renditions;
-    public String beauty_url;
+    public Object beauty_url;
     public boolean is_shoppable;
     public ArrayList<Topic> topics;
     public TotalTimeTier total_time_tier;

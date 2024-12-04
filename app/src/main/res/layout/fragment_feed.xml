@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".fragments.FeedFragment">
+    tools:context=".fragments.FeedFragment"
+    android:background="?attr/android:colorBackground">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -81,6 +82,15 @@
                             android:gravity="center"
                             android:id="@+id/featureLayout">
                             <include layout="@layout/feature_item"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            android:id="@+id/featureLayout1">
+                            <include layout="@layout/featured_recipes"/>
                         </LinearLayout>
 
                         <com.airbnb.lottie.LottieAnimationView

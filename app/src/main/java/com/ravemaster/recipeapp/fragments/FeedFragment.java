@@ -1,19 +1,20 @@
 package com.ravemaster.recipeapp.fragments;
 
+import static android.view.View.GONE;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,12 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.ravemaster.recipeapp.adapters.FeatureAdapter;
+import com.ravemaster.recipeapp.api.getfeed.models.Item;
+import com.ravemaster.recipeapp.api.getfeed.models.Item3;
+import com.ravemaster.recipeapp.api.getfeed.models.Recipe;
+import com.ravemaster.recipeapp.clickinterfaces.OnFeatureClicked;
+import com.ravemaster.recipeapp.viewmodels.FeedViewModel;
 import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.RecipeDetailsActivity;
 import com.ravemaster.recipeapp.adapters.MealPlanAdapter;
@@ -35,27 +42,30 @@ import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
 import com.ravemaster.recipeapp.api.getfeed.models.Item2;
 import com.ravemaster.recipeapp.clickinterfaces.OnMealPlanClicked;
 import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
-import com.ravemaster.recipeapp.utilities.Constants;
+import com.ravemaster.recipeapp.viewmodelfactories.FeedViewModelFactory;
 import com.ravemaster.recipeapp.utilities.PreferenceManager;
 
 public class FeedFragment extends Fragment {
 
-    public ShimmerFrameLayout featurePlaceHolder, mealPlanPlaceHolder,trendingPlaceHolder;
-    public LinearLayout featureLayout,mealPlanLayout,trendingLayout;
+    public ShimmerFrameLayout featurePlaceHolder, featurePlaceHolder1, mealPlanPlaceHolder,trendingPlaceHolder;
+    public LinearLayout featureLayout,featureLayout1,mealPlanLayout,trendingLayout;
     ImageView imgFeature,userProfile;
     TextView txtFeatureName, txtFeatureRating, txtFeatureTime, txtFeatureServings,txtMealPlanTitle,txtUsername;
-    RecyclerView mealPlanRecycler,trendingRecycler;
+    RecyclerView mealPlanRecycler,trendingRecycler,featureRecycler;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
-    LottieAnimationView lottie,lottie1,lottie2;
+    LottieAnimationView lottie,lottie1,lottie2,lottie4;
 
     RequestManager manager;
     MealPlanAdapter mealPlanAdapter;
     TrendingAdapter trendingAdapter;
+    FeatureAdapter featureAdapter;
     PreferenceManager preferenceManager;
     public int id = 0;
-    private Context context;
+    FeedViewModel feedViewModel;
+    FeedViewModelFactory factory;
+    boolean isfetched = false;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -69,27 +79,29 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        manager = new RequestManager(getActivity());
+        preferenceManager = new PreferenceManager(requireActivity());
+        factory = new FeedViewModelFactory(requireActivity());
+        feedViewModel = new ViewModelProvider(this, factory).get(FeedViewModel.class);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_feed, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initViews(view);
+        fetch();
 
-        manager = new RequestManager(getActivity());
-        preferenceManager = new PreferenceManager(getActivity());
-
-//        if (preferenceManager.getString(Constants.KEY_IMAGE).equals("")){
-//            userProfile.setBackgroundResource(R.drawable.img);
-//        } else {
-//            byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT);
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//            userProfile.setImageBitmap(bitmap);
-//        }
-
-        manager.getFeedList(feedsListListener,false);
+        if (!isfetched){
+            feedViewModel.fetchFeedList(false);
+            isfetched = true;
+        } else {
+            Toast.makeText(requireActivity(), "Data has already been fetched", Toast.LENGTH_SHORT).show();
+        }
 
         imgFeature.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,99 +115,106 @@ public class FeedFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                lottie.setVisibility(View.INVISIBLE);
-                lottie1.setVisibility(View.INVISIBLE);
-                lottie2.setVisibility(View.INVISIBLE);
-                manager.getFeedList(feedsListListener,false);
-                featureLayout.setVisibility(View.GONE);
-                featurePlaceHolder.setVisibility(View.VISIBLE);
-                featurePlaceHolder.startShimmer();
-                mealPlanLayout.setVisibility(View.GONE);
-                mealPlanPlaceHolder.setVisibility(View.VISIBLE);
-                mealPlanPlaceHolder.startShimmer();
-                trendingLayout.setVisibility(View.GONE);
-                trendingPlaceHolder.setVisibility(View.VISIBLE);
-                trendingPlaceHolder.startShimmer();
+                hideLayouts();
+                hideAnimation();
+                startShimmer();
+                fetch();
+                if (feedViewModel.getFeedsLiveData().getValue() == null){
+                    feedViewModel.fetchFeedList(false);
+                }
             }
         });
-        return view;
     }
-
-    private final FeedsListListener feedsListListener = new FeedsListListener() {
-        @Override
-        public void onResponse(FeedsApiResponse response, String message) {
-
-            swipeRefreshLayout.setRefreshing(false);
-
-            featurePlaceHolder.stopShimmer();
-            featurePlaceHolder.setVisibility(View.INVISIBLE);
-            featureLayout.setVisibility(View.VISIBLE);
-            mealPlanPlaceHolder.stopShimmer();
-            mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
-            mealPlanLayout.setVisibility(View.VISIBLE);
-            trendingPlaceHolder.stopShimmer();
-            trendingPlaceHolder.setVisibility(View.INVISIBLE);
-            trendingLayout.setVisibility(View.VISIBLE);
-            lottie.setVisibility(View.INVISIBLE);
-            lottie1.setVisibility(View.INVISIBLE);
-            lottie2.setVisibility(View.INVISIBLE);
-
-            showData(response);
-
-        }
-
-        @Override
-        public void onError(String message) {
-
-            swipeRefreshLayout.setRefreshing(false);
-
-
-            Toast.makeText(requireActivity(), "Unable to load recipes.", Toast.LENGTH_SHORT).show();
-            lottie.setVisibility(View.VISIBLE);
-            lottie.animate();
-            lottie1.setVisibility(View.VISIBLE);
-            lottie1.animate().setStartDelay(2500).setDuration(2500);
-            lottie2.setVisibility(View.VISIBLE);
-            lottie2.animate().setStartDelay(5000).setDuration(5000);
-            featureLayout.setVisibility(View.GONE);
-            featurePlaceHolder.stopShimmer();
-            featurePlaceHolder.setVisibility(View.INVISIBLE);
-            mealPlanLayout.setVisibility(View.GONE);
-            mealPlanPlaceHolder.stopShimmer();
-            mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
-            trendingLayout.setVisibility(View.GONE);
-            trendingPlaceHolder.stopShimmer();
-            trendingPlaceHolder.setVisibility(View.INVISIBLE);
-
-        }
-
-        @Override
-        public void onLoading(boolean isLoading) {
-            if (isLoading){
-                featureLayout.setVisibility(View.INVISIBLE);
-                featurePlaceHolder.startShimmer();
-                mealPlanLayout.setVisibility(View.INVISIBLE);
-                mealPlanPlaceHolder.startShimmer();
-                trendingLayout.setVisibility(View.INVISIBLE);
-                trendingPlaceHolder.startShimmer();
-            } else {
-
-                swipeRefreshLayout.setRefreshing(false);
-
-                featurePlaceHolder.stopShimmer();
-                featurePlaceHolder.setVisibility(View.INVISIBLE);
-                featureLayout.setVisibility(View.VISIBLE);
-                mealPlanPlaceHolder.stopShimmer();
-                mealPlanPlaceHolder.setVisibility(View.INVISIBLE);
-                mealPlanLayout.setVisibility(View.VISIBLE);
-                trendingPlaceHolder.stopShimmer();
-                trendingPlaceHolder.setVisibility(View.INVISIBLE);
-                trendingLayout.setVisibility(View.VISIBLE);
-            }
-        }
-    };
+     private void fetch(){
+         feedViewModel.getFeedsLiveData().observe(getViewLifecycleOwner(), response ->{
+             swipeRefreshLayout.setRefreshing(false);
+             hideAnimation();
+             stopShimmer();
+             showLayouts();
+             showData(response);
+         });
+         feedViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), message->{
+             swipeRefreshLayout.setRefreshing(false);
+             Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+             stopShimmer();
+             hideLayouts();
+             showAnimation();
+         });
+         feedViewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), isLoading->{
+             if (isLoading){
+                 hideAnimation();
+                 hideLayouts();
+                 startShimmer();
+             }else{
+                 swipeRefreshLayout.setRefreshing(false);
+                 stopShimmer();
+                 hideAnimation();
+             }
+         });
+     }
+     private void showAnimation(){
+         lottie.setVisibility(View.VISIBLE);
+         lottie.animate();
+         lottie1.setVisibility(View.VISIBLE);
+         lottie1.animate().setStartDelay(2500).setDuration(2500);
+         lottie2.setVisibility(View.VISIBLE);
+         lottie2.animate().setStartDelay(5000).setDuration(5000);
+     }
+     private void hideAnimation(){
+         lottie.setVisibility(GONE);
+         lottie1.setVisibility(GONE);
+         lottie2.setVisibility(GONE);
+     }
+     private void startShimmer(){
+         featurePlaceHolder.setVisibility(View.VISIBLE);
+         featurePlaceHolder.startShimmer();
+         mealPlanPlaceHolder.setVisibility(View.VISIBLE);
+         mealPlanPlaceHolder.startShimmer();
+         trendingPlaceHolder.setVisibility(View.VISIBLE);
+         trendingPlaceHolder.startShimmer();
+     }
+     private void stopShimmer(){
+         featurePlaceHolder.stopShimmer();
+         featurePlaceHolder.setVisibility(GONE);
+         mealPlanPlaceHolder.stopShimmer();
+         mealPlanPlaceHolder.setVisibility(GONE);
+         trendingPlaceHolder.stopShimmer();
+         trendingPlaceHolder.setVisibility(GONE);
+     }
+     private void showLayouts(){
+         featureLayout.setVisibility(View.VISIBLE);
+         mealPlanLayout.setVisibility(View.VISIBLE);
+         trendingLayout.setVisibility(View.VISIBLE);
+     }
+     private void hideLayouts(){
+         featureLayout.setVisibility(GONE);
+         mealPlanLayout.setVisibility(GONE);
+         trendingLayout.setVisibility(GONE);
+     }
 
     private void showData(FeedsApiResponse response) {
+        if (response.results.get(0).item.user_ratings == null){
+            showManyFeatured(response);
+            featureLayout1.setVisibility(View.VISIBLE);
+            featureLayout.setVisibility(GONE);
+        } else {
+            showFeatured(response);
+            featureLayout.setVisibility(View.VISIBLE);
+            featureLayout1.setVisibility(View.GONE);
+        }
+        showMealPlanAdapter(response);
+        showTrendingRecipes(response);
+    }
+
+    private void showManyFeatured(FeedsApiResponse response) {
+        txtFeatureName.setText(response.results.get(0).item.name);
+        featureAdapter = new FeatureAdapter(getActivity(),response.results.get(0).item.recipes,onFeatureClicked);
+        featureRecycler.setAdapter(trendingAdapter);
+        featureRecycler.setHasFixedSize(true);
+        featureRecycler.setLayoutManager(new LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false));
+    }
+
+    private void showFeatured(FeedsApiResponse response) {
         Glide.with(requireActivity())
                 .load(response.results.get(0).item.thumbnail_url)
                 .placeholder(R.drawable.placeholder)
@@ -206,6 +225,7 @@ public class FeedFragment extends Fragment {
         String name = response.results.get(0).item.name;
 
         int positive = response.results.get(0).item.user_ratings.count_positive;
+
         int negative = response.results.get(0).item.user_ratings.count_negative;
         int total = positive + negative;
         double percent = ((double) positive / total ) * 100;
@@ -224,24 +244,19 @@ public class FeedFragment extends Fragment {
             txtFeatureTime.setText(time);
         }
         txtFeatureServings.setText(servings);
-
-        showMealPlanAdapter(response);
-        showTrendingRecipes(response);
     }
 
     private void showTrendingRecipes(FeedsApiResponse response) {
         trendingAdapter = new TrendingAdapter(getActivity(),response.results.get(5).items,onTrendingClicked);
         trendingRecycler.setAdapter(trendingAdapter);
         trendingRecycler.setHasFixedSize(true);
-        trendingRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        trendingRecycler.setLayoutManager(new LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false));
     }
 
     private void showMealPlanAdapter(FeedsApiResponse response) {
         txtMealPlanTitle.setText(response.results.get(3).name);
         mealPlanAdapter = new MealPlanAdapter(getActivity(),response.results.get(3).items,onMealPlanClicked);
-        mealPlanRecycler.setAdapter(mealPlanAdapter);
-        mealPlanRecycler.setLayoutManager(new GridLayoutManager(requireActivity(),2));
-        mealPlanRecycler.setHasFixedSize(true);
+        mealPlanRecycler.setAdapter(mealPlanAdapter);;
     }
 
     private final OnMealPlanClicked onMealPlanClicked = new OnMealPlanClicked() {
@@ -261,12 +276,21 @@ public class FeedFragment extends Fragment {
             startActivity(intent);
         }
     };
+    private final OnFeatureClicked onFeatureClicked = new OnFeatureClicked() {
+        @Override
+        public void moveToRecipeDetails(Recipe item) {
+            Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
+            intent.putExtra("id",item.id);
+            startActivity(intent);
+        }
+    };
 
     private void initViews(View view) {
         featurePlaceHolder = view.findViewById(R.id.featurePlaceholderLayout);
         mealPlanPlaceHolder = view.findViewById(R.id.mealPlanPlaceholderLayout);
         trendingPlaceHolder = view.findViewById(R.id.trendingPlaceholderLayout);
         featureLayout = view.findViewById(R.id.featureLayout);
+        featureLayout1 = view.findViewById(R.id.featureLayout1);
         mealPlanLayout = view.findViewById(R.id.mealPlanLayout);
         trendingLayout = view.findViewById(R.id.trendingLayout);
         imgFeature = view.findViewById(R.id.imgFeature);
@@ -275,6 +299,7 @@ public class FeedFragment extends Fragment {
         txtFeatureRating = view.findViewById(R.id.txtFeatureRating);
         txtFeatureServings = view.findViewById(R.id.txtFeatureServing);
         mealPlanRecycler = view.findViewById(R.id.mealPlanRecycler);
+        featureRecycler = view.findViewById(R.id.featureRecycler);
         txtMealPlanTitle = view.findViewById(R.id.txtMealPlanTitle);
         trendingRecycler = view.findViewById(R.id.trendingRecycler);
         swipeRefreshLayout = view.findViewById(R.id.feedRefresh);

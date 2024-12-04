@@ -7,6 +7,8 @@ import static androidx.core.app.ActivityCompat.finishAffinity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
@@ -84,9 +86,15 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        initViews(view);
-        preferenceManager = new PreferenceManager(getActivity());
+        preferenceManager = new PreferenceManager(requireActivity());
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews(view);
         boolean isDarkTheme = preferenceManager.getIsDarkTheme(Constants.IS_DARK_THEME);
         materialSwitch.setChecked(isDarkTheme);
         if (isDarkTheme){
@@ -113,7 +121,6 @@ public class SettingsFragment extends Fragment {
                 }
             }
         });
-        return view;
     }
 
     public void restartApp() {

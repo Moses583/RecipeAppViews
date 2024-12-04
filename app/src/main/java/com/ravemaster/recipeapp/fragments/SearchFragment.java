@@ -3,7 +3,10 @@ package com.ravemaster.recipeapp.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +40,10 @@ import com.ravemaster.recipeapp.api.getrecipelist.models.RecipeListApiResponse;
 import com.ravemaster.recipeapp.api.getrecipelist.models.Result;
 import com.ravemaster.recipeapp.clickinterfaces.AutoCompleteClick;
 import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
+import com.ravemaster.recipeapp.viewmodelfactories.AutoCompleteFactory;
+import com.ravemaster.recipeapp.viewmodelfactories.RecipeListViewModelFactory;
+import com.ravemaster.recipeapp.viewmodels.AutoCompleteViewModel;
+import com.ravemaster.recipeapp.viewmodels.RecipesViewModel;
 
 import java.util.Random;
 
@@ -58,11 +65,18 @@ public class SearchFragment extends Fragment {
 
     RequestManager manager;
 
+    RecipesViewModel recipesViewModel;
+    RecipeListViewModelFactory factory;
+
+    AutoCompleteViewModel viewModel;
+    AutoCompleteFactory autoCompleteFactory;
+
     public int offset = 0;
     public String mainQuery = "";
+    boolean isFetched = false;
 
     public SearchFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -70,55 +84,69 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        factory = new RecipeListViewModelFactory(requireActivity());
+        autoCompleteFactory = new AutoCompleteFactory(requireActivity());
+        recipesViewModel = new ViewModelProvider(requireActivity(),factory).get(RecipesViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity(),autoCompleteFactory).get(AutoCompleteViewModel.class);
+        manager = new RequestManager(requireActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        return inflater.inflate(R.layout.fragment_search, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initViews(view);
 
-        manager = new RequestManager(getActivity());
-
-
-        manager.getRecipeList(recipeListListener,offset,10, mainQuery);
-        manager.getAutoComplete(autoCompleteListener,"lasagna");
+        fetch();
+        fetch2();
+        if (!isFetched){
+            recipesViewModel.fetchRecipesList(offset,1,mainQuery);
+            viewModel.fetchAutoComplete("lasagna");
+            isFetched = true;
+        } else {
+            Toast.makeText(requireActivity(), "Data has already been fetched", Toast.LENGTH_SHORT).show();
+        }
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                offset += 10;
-                manager.getRecipeList(recipeListListener,offset, 10,mainQuery);
-                recipeLayout.setVisibility(View.INVISIBLE);
-                recipePlaceHolder.setVisibility(View.VISIBLE);
-                recipePlaceHolder.startShimmer();
-                lottie.setVisibility(View.INVISIBLE);
+                stopAnimations();
+                hideLayouts();
+                startShimmer();
+                int newOffset = offset + 10;
+                recipesViewModel.fetchRecipesList(newOffset,1,mainQuery);
+                Toast.makeText(requireActivity(), "Pressed", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stopAnimations();
+                hideLayouts();
+                startShimmer();
                 if (offset != 0) {
-                    offset -= 10;
+                    int newOffset = offset - 10;
+                    recipesViewModel.fetchRecipesList(newOffset,1,mainQuery);
                 }
-                manager.getRecipeList(recipeListListener,offset, 10,mainQuery);
-                recipeLayout.setVisibility(View.INVISIBLE);
-                recipePlaceHolder.setVisibility(View.VISIBLE);
-                recipePlaceHolder.startShimmer();
-                lottie.setVisibility(View.INVISIBLE);
+
             }
         });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                manager.getRecipeList(recipeListListener,offset,10,"");
-                recipeLayout.setVisibility(View.GONE);
-                recipePlaceHolder.setVisibility(View.VISIBLE);
-                recipePlaceHolder.startShimmer();
-                lottie.setVisibility(View.INVISIBLE);
+                stopAnimations();
+                hideLayouts();
+                startShimmer();
+                fetch();
+                recipesViewModel.fetchRecipesList(offset,1,mainQuery);
+
             }
         });
 
@@ -130,7 +158,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                manager.getAutoComplete(autoCompleteListener,s.toString());
+                fetch2();
+                viewModel.fetchAutoComplete(s.toString());
             }
 
             @Override
@@ -150,10 +179,11 @@ public class SearchFragment extends Fragment {
 
                     mainQuery = query;
 
-                    recipeLayout.setVisibility(View.INVISIBLE);
-                    recipePlaceHolder.setVisibility(View.VISIBLE);
-                    recipePlaceHolder.startShimmer();
-                    manager.getRecipeList(recipeListListener,offset,10,mainQuery);
+                    hideLayouts();
+                    stopAnimations();
+                    startShimmer();
+                    fetch();
+                    recipesViewModel.fetchRecipesList(offset,1,mainQuery);
 
                     searchView.hide();
                     // Perform your search logic here
@@ -163,64 +193,75 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        return view;
     }
 
-    private final RecipeListListener recipeListListener = new RecipeListListener() {
-        @Override
-        public void onResponse(RecipeListApiResponse response, String message) {
-
+    private void fetch(){
+        recipesViewModel.getFeedsLiveData().observe(getViewLifecycleOwner(), response -> {
             swipeRefreshLayout.setRefreshing(false);
-
-            recipePlaceHolder.stopShimmer();
-            recipePlaceHolder.setVisibility(View.INVISIBLE);
-            recipeLayout.setVisibility(View.VISIBLE);
-            lottie.setVisibility(View.INVISIBLE);
-
+            stopAnimations();
+            stopShimmer();
+            showLayouts();
             showData(response);
-        }
 
-        @Override
-        public void onFailure(String message) {
-            swipeRefreshLayout.setRefreshing(false);
-            recipePlaceHolder.stopShimmer();
-            recipePlaceHolder.setVisibility(View.INVISIBLE);
-            recipeLayout.setVisibility(View.GONE);
+        } );
+        recipesViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), message -> {
             Toast.makeText(requireActivity(), "Unable to load recipes", Toast.LENGTH_SHORT).show();
-            lottie.setVisibility(View.VISIBLE);
-            lottie.animate();
-        }
-
-        @Override
-        public void onLoading(boolean isLoading) {
+            swipeRefreshLayout.setRefreshing(false);
+            stopShimmer();
+            hideLayouts();
+            startAnimations();
+        } );
+        recipesViewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading){
-                recipeLayout.setVisibility(View.INVISIBLE);
-                recipePlaceHolder.startShimmer();
-
+                hideLayouts();
+                stopAnimations();
+                startShimmer();
             } else {
                 swipeRefreshLayout.setRefreshing(false);
-                recipePlaceHolder.stopShimmer();
-                recipePlaceHolder.setVisibility(View.INVISIBLE);
-                recipeLayout.setVisibility(View.VISIBLE);
+                stopAnimations();
+                stopShimmer();
             }
-        }
-    };
-    private final AutoCompleteListener autoCompleteListener = new AutoCompleteListener() {
-        @Override
-        public void onResponse(AutoCompleteApiResponse response, String message) {
-            showAutoCompleteRecycler(response);
-        }
+        } );
+    }
+    private void fetch2(){
+        viewModel.getFeedsLiveData().observe(getViewLifecycleOwner(), autoCompleteApiResponse -> {
+            showAutoCompleteRecycler(autoCompleteApiResponse);
+        });
+        viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), message ->{
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+        });
+        viewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), isLoading->{
 
-        @Override
-        public void onError(String message) {
-            Toast.makeText(requireActivity(), "Unavailable!", Toast.LENGTH_SHORT).show();
-        }
+        });
+    }
 
-        @Override
-        public void onLoading(boolean isLoading) {
+    private void startShimmer(){
+        recipePlaceHolder.setVisibility(View.VISIBLE);
+        recipePlaceHolder.startShimmer();
+    }
 
-        }
-    };
+    private void stopShimmer(){
+        recipePlaceHolder.stopShimmer();
+        recipePlaceHolder.setVisibility(View.GONE);
+    }
+
+    private void showLayouts(){
+        recipeLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLayouts(){
+        recipeLayout.setVisibility(View.GONE);
+    }
+
+    private void startAnimations(){
+        lottie.setVisibility(View.VISIBLE);
+        lottie.animate();
+    }
+
+    private void stopAnimations(){
+        lottie.setVisibility(View.GONE);
+    }
+
 
     private void showAutoCompleteRecycler(AutoCompleteApiResponse response) {
         if (response != null){
@@ -236,7 +277,7 @@ public class SearchFragment extends Fragment {
         adapter = new RecipeListAdapter(getActivity(),response.results,onRecipeClicked);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
     }
 
     private final OnRecipeClicked onRecipeClicked = new OnRecipeClicked() {
@@ -255,7 +296,7 @@ public class SearchFragment extends Fragment {
             recipeLayout.setVisibility(View.INVISIBLE);
             recipePlaceHolder.setVisibility(View.VISIBLE);
             recipePlaceHolder.startShimmer();
-            manager.getRecipeList(recipeListListener,0,10,result.display);
+            recipesViewModel.fetchRecipesList(offset,10, result.display);
         }
     };
 

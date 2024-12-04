@@ -5,24 +5,28 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.SearchFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?attr/android:colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:background="?attr/android:colorBackground">
         <com.google.android.material.search.SearchBar
             android:id="@+id/mySearch_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search recipes" />
+            android:hint="Search recipes"
+            android:background="?attr/android:colorBackground"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.search.SearchView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="Search recipes"
-        android:id="@+id/mySearchView">
+        android:id="@+id/mySearchView"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

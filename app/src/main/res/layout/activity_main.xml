@@ -6,13 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="?attr/android:colorBackground">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/myViewPager"
+<!--    <androidx.viewpager2.widget.ViewPager2-->
+<!--        android:id="@+id/myViewPager"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_above="@id/layoutBottom" />-->
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layoutBottom" />
+        android:layout_above="@id/layoutBottom"/>
     <RelativeLayout
         android:id="@+id/layoutBottom"
         android:layout_width="match_parent"
@@ -27,7 +33,8 @@
             android:layout_height="wrap_content"
             android:paddingBottom="0dp"
             app:menu="@menu/bottom_nav_menu"
-            app:labelVisibilityMode="labeled"/>
+            app:labelVisibilityMode="labeled"
+            android:background="?attr/android:colorBackground"/>
     </RelativeLayout>
 
 </RelativeLayout>

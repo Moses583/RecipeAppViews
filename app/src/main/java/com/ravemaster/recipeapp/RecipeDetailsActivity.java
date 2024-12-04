@@ -225,6 +225,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private void showSimilarRecipes(SimilarRecipeApiResponse response) {
         similarAdapter = new SimilarAdapter(this,response.results,similarClicked);
         recyclerView.setAdapter(similarAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(RecipeDetailsActivity.this,LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setHasFixedSize(true);
     }
 
     private final OnSimilarClicked similarClicked = new OnSimilarClicked() {

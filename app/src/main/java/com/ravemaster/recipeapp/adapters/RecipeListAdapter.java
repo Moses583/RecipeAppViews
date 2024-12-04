@@ -66,7 +66,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         }
         holder.time.setSelected(true);
         holder.ratings.setText(rating);
-        holder.ratings.setSelected(true);
+        holder.keywords.setText(results.get(position).keywords);
+        holder.servings.setText(String.valueOf(results.get(position).num_servings)+" people");
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +85,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     public static class RecipesViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
-        TextView name, time, ratings;
+        TextView name, time, ratings, servings,keywords;
         MaterialCardView cardView;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,6 +94,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
             time = itemView.findViewById(R.id.txtRecipeTime);
             ratings = itemView.findViewById(R.id.txtRecipeRating);
             cardView = itemView.findViewById(R.id.recipeCardView);
+            servings = itemView.findViewById(R.id.txtRecipeServing);
+            keywords = itemView.findViewById(R.id.txtRecipeKeywords);
         }
     }
 }

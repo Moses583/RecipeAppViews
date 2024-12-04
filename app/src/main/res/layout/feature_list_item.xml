@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:id="@+id/trendingCardView">
+    android:id="@+id/featureItemCardView">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:id="@+id/imgTrending"
+            android:id="@+id/imgFeatureItem"
             android:src="@drawable/placeholder"
             android:scaleType="centerCrop"/>
         <TextView
@@ -27,7 +27,7 @@
             android:text="Name"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:id="@+id/txtTrendingName"
+            android:id="@+id/txtFeatureItemName"
             android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
@@ -47,12 +47,12 @@
                 android:src="@drawable/rating"
                 android:layout_margin="5dp"
                 android:layout_centerVertical="true"
-                android:id="@+id/imgTrendingRating"/>
+                android:id="@+id/imgFeatureItemRating"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/imgTrendingRating"
-                android:id="@+id/txtTrendingRating"
+                android:layout_toEndOf="@id/imgFeatureItemRating"
+                android:id="@+id/txtFeatureItemRating"
                 android:layout_centerVertical="true"
                 android:text="rating"
                 android:layout_margin="5dp"/>
@@ -66,19 +66,18 @@
                 android:layout_height="24dp"
                 android:src="@drawable/time"
                 android:layout_margin="5dp"
-                android:id="@+id/imgTrendingTime"
+                android:id="@+id/imgFeatureItemTime"
                 android:layout_centerVertical="true"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/imgTrendingTime"
-                android:id="@+id/txtTrendingTime"
+                android:layout_toEndOf="@id/imgFeatureItemTime"
+                android:id="@+id/txtFeatureItemTime"
                 android:layout_centerVertical="true"
                 android:text="10 min"
                 android:layout_margin="5dp"/>
         </RelativeLayout>
 
     </LinearLayout>
-
 
 </com.google.android.material.card.MaterialCardView>

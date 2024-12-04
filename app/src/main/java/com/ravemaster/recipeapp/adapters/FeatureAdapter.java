@@ -8,26 +8,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.carousel.MaskableFrameLayout;
 import com.ravemaster.recipeapp.R;
-import com.ravemaster.recipeapp.api.getsimilarrecipes.models.Result;
-import com.ravemaster.recipeapp.clickinterfaces.OnSimilarClicked;
-import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
+import com.ravemaster.recipeapp.api.getfeed.models.Item;
+import com.ravemaster.recipeapp.api.getfeed.models.Recipe;
+import com.ravemaster.recipeapp.clickinterfaces.OnFeatureClicked;
 
 import java.util.ArrayList;
 
-public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.SimilarViewHolder> {
+public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.FeatureViewholder> {
 
     private Context context;
-    private ArrayList<Result> arrayList;
-    private OnSimilarClicked listener;
+    private ArrayList<Recipe> arrayList;
+    private OnFeatureClicked listener;
 
-    public SimilarAdapter(Context context, ArrayList<Result> arrayList, OnSimilarClicked listener) {
+    public FeatureAdapter(Context context, ArrayList<Recipe> arrayList, OnFeatureClicked listener) {
         this.context = context;
         this.arrayList = arrayList;
         this.listener = listener;
@@ -35,12 +33,12 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.SimilarV
 
     @NonNull
     @Override
-    public SimilarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SimilarViewHolder(LayoutInflater.from(context).inflate(R.layout.similar_recipe_list_item,parent,false));
+    public FeatureViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new FeatureViewholder(LayoutInflater.from(context).inflate(R.layout.feature_list_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SimilarViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FeatureViewholder holder, int position) {
         Glide
                 .with(context)
                 .load(arrayList.get(position).thumbnail_url)
@@ -48,19 +46,19 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.SimilarV
                 .into(holder.imageView);
 
         String name = arrayList.get(holder.getAdapterPosition()).name;
-
-        holder.name.setText(name);
-        holder.name.setSelected(true);
         String time = String.valueOf(arrayList.get(holder.getAdapterPosition()).cook_time_minutes);
 
-        int positive = arrayList.get(position).user_ratings.count_positive;
-        int negative = arrayList.get(position).user_ratings.count_negative;
+        int positive = arrayList.get(holder.getAdapterPosition()).user_ratings.count_positive;
+        int negative = arrayList.get(holder.getAdapterPosition()).user_ratings.count_negative;
 
         int total = positive + negative;
 
         double percent = ((double) positive/ total)*100;
 
         String rating = String.format("%.1f%%",percent);
+
+        holder.name.setText(name);
+        holder.name.setSelected(true);
         if (time.equals("0")){
             holder.time.setText("60 min");
         } else {
@@ -81,18 +79,18 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.SimilarV
         return arrayList.size();
     }
 
-    public static class SimilarViewHolder extends RecyclerView.ViewHolder {
+    public static class FeatureViewholder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
         TextView name, time, ratings;
         MaterialCardView cardView;
-        public SimilarViewHolder(@NonNull View itemView) {
+        public FeatureViewholder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imgSimilar);
-            name = itemView.findViewById(R.id.txtSimilarName);
-            cardView = itemView.findViewById(R.id.similarCardView);
-            time = itemView.findViewById(R.id.txtSimilarTime);
-            ratings = itemView.findViewById(R.id.txtSimilarRating);
+            imageView = itemView.findViewById(R.id.imgFeatureItem);
+            name = itemView.findViewById(R.id.txtFeatureItemName);
+            time = itemView.findViewById(R.id.txtFeatureItemTime);
+            ratings = itemView.findViewById(R.id.txtFeatureItemRating);
+            cardView = itemView.findViewById(R.id.featureItemCardView);
         }
     }
 }

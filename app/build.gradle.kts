@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.splashscreen)
 
     implementation(libs.lottie)
+    implementation(libs.viewmodel)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

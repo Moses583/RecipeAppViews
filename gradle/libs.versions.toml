@@ -27,6 +27,8 @@ splashVersion = "1.0.1"
 
 lottieVersion = "6.6.0"
 
+viewmodelVersion = "2.8.7"
+
 
 
 [libraries]
@@ -37,6 +39,9 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "viewmodelVersion" }
+
 retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion"}
 gsonConverter = {group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gsonVersion"}
 okhttp3= {group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpVersion"}

@@ -13,4 +13,8 @@
     <color name="pink8">#F9BEC7</color>
     <color name="pink9">#F7CAD0</color>
     <color name="pink10">#FAE0E4</color>
+    <color name="background_main_light">#FAE0E4</color>
+    <color name="background_main_dark">#1c010f</color>
+    <color name="background_light">#FFFFFF</color>
+    <color name="background_dark">#000000</color>
 </resources>
