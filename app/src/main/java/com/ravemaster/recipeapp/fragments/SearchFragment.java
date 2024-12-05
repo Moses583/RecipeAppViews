@@ -102,100 +102,6 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
 
-        fetch();
-        fetch2();
-        if (!isFetched){
-            recipesViewModel.fetchRecipesList(offset,1,mainQuery);
-            viewModel.fetchAutoComplete("lasagna");
-            isFetched = true;
-        } else {
-            Toast.makeText(requireActivity(), "Data has already been fetched", Toast.LENGTH_SHORT).show();
-        }
-
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopAnimations();
-                hideLayouts();
-                startShimmer();
-                int newOffset = offset + 10;
-                recipesViewModel.fetchRecipesList(newOffset,1,mainQuery);
-                Toast.makeText(requireActivity(), "Pressed", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopAnimations();
-                hideLayouts();
-                startShimmer();
-                if (offset != 0) {
-                    int newOffset = offset - 10;
-                    recipesViewModel.fetchRecipesList(newOffset,1,mainQuery);
-                }
-
-            }
-        });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                stopAnimations();
-                hideLayouts();
-                startShimmer();
-                fetch();
-                recipesViewModel.fetchRecipesList(offset,1,mainQuery);
-
-            }
-        });
-
-        searchView.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                fetch2();
-                viewModel.fetchAutoComplete(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        searchView.setupWithSearchBar(searchBar);
-
-        searchView.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)){
-                    String query = v.getText().toString();
-
-                    mainQuery = query;
-
-                    hideLayouts();
-                    stopAnimations();
-                    startShimmer();
-                    fetch();
-                    recipesViewModel.fetchRecipesList(offset,1,mainQuery);
-
-                    searchView.hide();
-                    // Perform your search logic here
-                    return true;
-                }
-                return false;
-            }
-        });
-
-    }
-
-    private void fetch(){
         recipesViewModel.getFeedsLiveData().observe(getViewLifecycleOwner(), response -> {
             swipeRefreshLayout.setRefreshing(false);
             stopAnimations();
@@ -222,8 +128,6 @@ public class SearchFragment extends Fragment {
                 stopShimmer();
             }
         } );
-    }
-    private void fetch2(){
         viewModel.getFeedsLiveData().observe(getViewLifecycleOwner(), autoCompleteApiResponse -> {
             showAutoCompleteRecycler(autoCompleteApiResponse);
         });
@@ -233,6 +137,79 @@ public class SearchFragment extends Fragment {
         viewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), isLoading->{
 
         });
+        if (!isFetched){
+            recipesViewModel.fetchRecipesList(offset,10,mainQuery);
+            viewModel.fetchAutoComplete("lasagna");
+            isFetched = true;
+        } else {
+            Toast.makeText(requireActivity(), "Data has already been fetched", Toast.LENGTH_SHORT).show();
+        }
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newOffset = offset + 10;
+                recipesViewModel.fetchRecipesList(newOffset,10,mainQuery);
+            }
+        });
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (offset != 0) {
+                    int newOffset = offset - 10;
+                    recipesViewModel.fetchRecipesList(newOffset,10,mainQuery);
+                }
+
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                recipesViewModel.fetchRecipesList(offset,10,mainQuery);
+
+            }
+        });
+
+        searchView.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.fetchAutoComplete(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        searchView.setupWithSearchBar(searchBar);
+
+        searchView.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)){
+                    String query = v.getText().toString();
+
+                    mainQuery = query;
+
+                    recipesViewModel.fetchRecipesList(offset,1,mainQuery);
+
+                    searchView.hide();
+                    // Perform your search logic here
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     private void startShimmer(){

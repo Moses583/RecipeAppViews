@@ -110,13 +110,7 @@ public class FeedFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                hideLayouts();
-                hideAnimation();
-                startShimmer();
-                fetch();
-                if (feedViewModel.getFeedsLiveData().getValue() == null){
-                    feedViewModel.fetchFeedList(false);
-                }
+                feedViewModel.fetchFeedList(false);
             }
         });
     }

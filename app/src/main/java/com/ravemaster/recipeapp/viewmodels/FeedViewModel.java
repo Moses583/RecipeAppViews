@@ -36,10 +36,8 @@ public class FeedViewModel extends ViewModel {
     }
 
     public void fetchFeedList(boolean vegetarian) {
-        if (feedsLiveData.getValue() == null) {
-            loadingLiveData.setValue(true);
-            manager.getFeedList(listener, vegetarian);
-        }
+        loadingLiveData.setValue(true);
+        manager.getFeedList(listener, vegetarian);
     }
 
 

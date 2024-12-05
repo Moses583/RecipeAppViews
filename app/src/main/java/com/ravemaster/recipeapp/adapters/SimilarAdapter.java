@@ -51,7 +51,7 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.SimilarV
 
         holder.name.setText(name);
         holder.name.setSelected(true);
-        String time = String.valueOf(arrayList.get(holder.getAdapterPosition()).cook_time_minutes);
+        String time = String.valueOf(arrayList.get(holder.getAdapterPosition()).total_time_minutes);
 
         int positive = arrayList.get(position).user_ratings.count_positive;
         int negative = arrayList.get(position).user_ratings.count_negative;

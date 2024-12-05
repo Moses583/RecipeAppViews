@@ -36,10 +36,8 @@ public class RecipesViewModel extends ViewModel {
     }
 
     public void fetchRecipesList(int offset, int size, String query){
-        if (feedsLiveData.getValue() == null){
-            loadingLiveData.setValue(true);
-            manager.getRecipeList(listener,offset,size, query);
-        }
+        loadingLiveData.setValue(true);
+        manager.getRecipeList(listener,offset,size, query);
     }
 
     private final RecipeListListener listener = new RecipeListListener() {

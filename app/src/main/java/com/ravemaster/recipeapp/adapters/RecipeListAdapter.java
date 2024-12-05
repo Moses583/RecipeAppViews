@@ -46,7 +46,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
                 .into(holder.imageView);
 
         String name = results.get(holder.getAdapterPosition()).name;
-        String time = String.valueOf(results.get(holder.getAdapterPosition()).cook_time_minutes);
+        String time = String.valueOf(results.get(holder.getAdapterPosition()).total_time_minutes);
 
         int positive = results.get(position).user_ratings.count_positive;
         int negative = results.get(position).user_ratings.count_negative;
@@ -66,7 +66,15 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         }
         holder.time.setSelected(true);
         holder.ratings.setText(rating);
-        holder.keywords.setText(results.get(position).keywords);
+        String keywords = results.get(position).keywords;
+        if (keywords.equals("")){
+            holder.keywords.setVisibility(View.GONE);
+            holder.dummy.setVisibility(View.GONE);
+        } else {
+            holder.keywords.setVisibility(View.VISIBLE);
+            holder.dummy.setVisibility(View.VISIBLE);
+            holder.keywords.setText(keywords);
+        }
         holder.servings.setText(String.valueOf(results.get(position).num_servings)+" people");
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +93,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     public static class RecipesViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
-        TextView name, time, ratings, servings,keywords;
+        TextView name, time, ratings, servings,keywords,dummy;
         MaterialCardView cardView;
         public RecipesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,6 +104,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
             cardView = itemView.findViewById(R.id.recipeCardView);
             servings = itemView.findViewById(R.id.txtRecipeServing);
             keywords = itemView.findViewById(R.id.txtRecipeKeywords);
+            dummy = itemView.findViewById(R.id.txtKeywordsDummy);
         }
     }
 }

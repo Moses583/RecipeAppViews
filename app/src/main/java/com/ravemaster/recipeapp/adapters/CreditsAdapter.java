@@ -34,14 +34,25 @@ public class CreditsAdapter extends RecyclerView.Adapter<CreditsAdapter.CreditsV
 
     @Override
     public void onBindViewHolder(@NonNull CreditsViewHolder holder, int position) {
-        Glide
-                .with(context)
-                .load(credits.get(position).picture_url)
-                .placeholder(R.drawable.img)
-                .into(holder.imgAuthor);
-
-        holder.name.setText(credits.get(position).name);
+        String name = credits.get(position).name;
+        String url = credits.get(position).picture_url;
         boolean isVerified = credits.get(position).is_verified;
+        if (name != null ){
+            holder.name.setText(name);
+        }
+        else {
+            holder.name.setText("Anonymous author");
+        }
+
+        if (!url.equals("")){
+            Glide
+                    .with(context)
+                    .load(url)
+                    .placeholder(R.drawable.img)
+                    .into(holder.imgAuthor);
+        } else {
+            holder.imgAuthor.setBackgroundResource(R.drawable.img);
+        }
 
         if (isVerified){
             holder.verified.setVisibility(View.VISIBLE);

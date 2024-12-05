@@ -36,6 +36,7 @@ import com.ravemaster.recipeapp.adapters.SimilarAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getrecipedetails.interfaces.RecipeDetailsListener;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Component;
+import com.ravemaster.recipeapp.api.getrecipedetails.models.Credit;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Instruction;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.RecipeDetailApiResponse;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Section;
@@ -52,7 +53,7 @@ import java.util.ArrayList;
 public class RecipeDetailsActivity extends AppCompatActivity {
 
     RequestManager manager;
-    CardView goBack, save;
+    CardView goBack, save, authorsCardView;
     ImageView imgRecipe;
     TextView name, servings, ratings, time, description, ingredients, instructions;
     ShimmerFrameLayout placeholder, similarPlaceHolder;
@@ -294,7 +295,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         int total = positive + negative;
         double percent = ((double) positive / total ) * 100;
         String ratings1 = String.format("%.1f%%",percent);
-        String time1 = String.valueOf(response.cook_time_minutes)+" min";
+        String time1 = String.valueOf(response.total_time_minutes);
         String servings1 = String.valueOf(response.num_servings)+ " people";
         two = response.description;
 
@@ -305,7 +306,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if (time1.equals("0")){
             time.setText("60 min");
         } else {
-            time.setText(time1);
+            time.setText(time1+" min");
         }
 
         if (two==null){
@@ -412,6 +413,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private void initViews() {
         goBack = findViewById(R.id.cardViewGoBack);
         save = findViewById(R.id.cardViewSaveRecipe);
+        authorsCardView = findViewById(R.id.authorsCardView);
 
         imgRecipe = findViewById(R.id.imgRecipeDetails);
 

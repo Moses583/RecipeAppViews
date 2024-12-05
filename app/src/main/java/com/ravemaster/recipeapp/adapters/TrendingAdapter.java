@@ -45,7 +45,7 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.Trendi
                 .into(holder.imageView);
 
         String name = arrayList.get(holder.getAdapterPosition()).name;
-        String time = String.valueOf(arrayList.get(holder.getAdapterPosition()).cook_time_minutes);
+        String time = String.valueOf(arrayList.get(holder.getAdapterPosition()).total_time_minutes);
 
         int positive = arrayList.get(holder.getAdapterPosition()).user_ratings.count_positive;
         int negative = arrayList.get(holder.getAdapterPosition()).user_ratings.count_negative;
