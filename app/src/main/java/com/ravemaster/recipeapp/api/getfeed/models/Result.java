@@ -6,7 +6,7 @@ public class Result {
     public String type;
     public Item item;
     public String name;
-    public ArrayList<Item2> items;
+    public ArrayList<Item> items;
     public String category;
     public int min_items;
 }

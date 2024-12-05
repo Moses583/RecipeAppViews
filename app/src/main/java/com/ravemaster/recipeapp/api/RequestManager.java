@@ -41,7 +41,7 @@ public class RequestManager {
         listener.onLoading(true);
 
         GetFeed getFeed = retrofit.create(GetFeed.class);
-        Call<FeedsApiResponse> call = getFeed.getFeedList(5,"+0300",vegetarian,0,"ed4b9641acmshe6e3944254ccdf8p12c249jsn32c2d44e1c9b","tasty.p.rapidapi.com");
+        Call<FeedsApiResponse> call = getFeed.getFeedList(10,"-1000",vegetarian,0,"ed4b9641acmshe6e3944254ccdf8p12c249jsn32c2d44e1c9b","tasty.p.rapidapi.com");
         call.enqueue(new Callback<FeedsApiResponse>() {
             @Override
             public void onResponse(Call<FeedsApiResponse> call, Response<FeedsApiResponse> response) {

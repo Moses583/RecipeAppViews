@@ -8,14 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.ravemaster.recipeapp.R;
-import com.ravemaster.recipeapp.api.getfeed.models.Item2;
-import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
+import com.ravemaster.recipeapp.api.getfeed.models.Item;
 import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
 
 import java.util.ArrayList;
@@ -23,10 +21,10 @@ import java.util.ArrayList;
 public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder> {
 
     private Context context;
-    private ArrayList<Item2> arrayList;
+    private ArrayList<Item> arrayList;
     private OnTrendingClicked listener;
 
-    public TrendingAdapter(Context context, ArrayList<Item2> arrayList, OnTrendingClicked listener) {
+    public TrendingAdapter(Context context, ArrayList<Item> arrayList, OnTrendingClicked listener) {
         this.context = context;
         this.arrayList = arrayList;
         this.listener = listener;

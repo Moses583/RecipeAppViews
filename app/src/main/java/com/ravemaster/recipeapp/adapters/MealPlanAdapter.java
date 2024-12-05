@@ -8,25 +8,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.carousel.MaskableFrameLayout;
 import com.ravemaster.recipeapp.R;
-import com.ravemaster.recipeapp.api.getfeed.models.Item2;
+import com.ravemaster.recipeapp.api.getfeed.models.Item;
 import com.ravemaster.recipeapp.clickinterfaces.OnMealPlanClicked;
-import com.ravemaster.recipeapp.clickinterfaces.OnRecipeClicked;
 
 import java.util.ArrayList;
 
 public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPlanViewHolder> {
     private Context context;
-    private ArrayList<Item2> urls;
+    private ArrayList<Item> urls;
     OnMealPlanClicked onMealPlanClicked;
 
-    public MealPlanAdapter(Context context, ArrayList<Item2> urls,OnMealPlanClicked onMealPlanClicked) {
+    public MealPlanAdapter(Context context, ArrayList<Item> urls,OnMealPlanClicked onMealPlanClicked) {
         this.context = context;
         this.urls = urls;
         this.onMealPlanClicked = onMealPlanClicked;

@@ -31,6 +31,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.ravemaster.recipeapp.adapters.CreditsAdapter;
 import com.ravemaster.recipeapp.adapters.SimilarAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getrecipedetails.interfaces.RecipeDetailsListener;
@@ -52,17 +53,18 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
     RequestManager manager;
     CardView goBack, save;
-    ImageView imgRecipe,imgSave;
+    ImageView imgRecipe;
     TextView name, servings, ratings, time, description, ingredients, instructions;
     ShimmerFrameLayout placeholder, similarPlaceHolder;
     LinearLayout layout, chartLayout, similarLayout;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,creditsRecycler;
 
     LottieAnimationView lottie;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
     SimilarAdapter similarAdapter;
+    CreditsAdapter creditsAdapter;
 
     ExtendedFloatingActionButton btnPlayButton;
     int id;
@@ -285,6 +287,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 .load(response.thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(imgRecipe);
+
         one = response.name;
         int positive = response.user_ratings.count_positive;
         int negative = response.user_ratings.count_negative;
@@ -329,7 +332,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         three = builder1.toString();
         ingredients.setText(three);
 
-        if (response.nutrition != null){
+        if (response.nutrition.calories != 0 || response.nutrition.carbohydrates != 0||
+        response.nutrition.sugar != 0 || response.nutrition.protein != 0||
+        response.nutrition.fat != 0 || response.nutrition.fiber != 0){
             chartLayout.setVisibility(View.VISIBLE);
 
             ArrayList<PieEntry> entries = new ArrayList<>();
@@ -363,6 +368,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             chart.setHoleColor(Color.TRANSPARENT);
             chart.animateY(1000);
             chart.invalidate();
+        } else {
+            chartLayout.setVisibility(View.GONE);
         }
 
         StringBuilder builder2 = new StringBuilder();
@@ -381,6 +388,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             btnPlayButton.setVisibility(View.VISIBLE);
         }
 
+        showCreditsRecycler(response);
+
+    }
+
+    private void showCreditsRecycler(RecipeDetailApiResponse response) {
+        creditsAdapter = new CreditsAdapter(this,response.credits);
+        creditsRecycler.setAdapter(creditsAdapter);
+        creditsRecycler.setHasFixedSize(true);
+        creditsRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void shareText(String text) {
@@ -414,6 +430,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         chartLayout = findViewById(R.id.chartLayout);
 
         recyclerView = findViewById(R.id.similarRecycler);
+        creditsRecycler = findViewById(R.id.creditsRecycler);
 
         chart = findViewById(R.id.nutritionChart);
 

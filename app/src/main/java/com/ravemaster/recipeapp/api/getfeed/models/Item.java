@@ -60,4 +60,16 @@ public class Item {
     public String yields;
     public String original_video_url;
     public int cook_time_minutes;
+    public String username;
+    public String first_name;
+    public String last_name;
+    public String picture_url;
+    public ArrayList<String> specialty_tags;
+    public Object user_id;
+    public String type;
+    public boolean is_free;
+    public Object start_date;
+    public Object end_date;
+    public int num_items;
+    public ArrayList<String> thumbnail_urls;
 }

@@ -2,7 +2,6 @@ package com.ravemaster.recipeapp.fragments;
 
 import static android.view.View.GONE;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -28,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.ravemaster.recipeapp.adapters.FeatureAdapter;
 import com.ravemaster.recipeapp.api.getfeed.models.Item;
-import com.ravemaster.recipeapp.api.getfeed.models.Item3;
 import com.ravemaster.recipeapp.api.getfeed.models.Recipe;
 import com.ravemaster.recipeapp.clickinterfaces.OnFeatureClicked;
 import com.ravemaster.recipeapp.viewmodels.FeedViewModel;
@@ -37,9 +34,7 @@ import com.ravemaster.recipeapp.RecipeDetailsActivity;
 import com.ravemaster.recipeapp.adapters.MealPlanAdapter;
 import com.ravemaster.recipeapp.adapters.TrendingAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
-import com.ravemaster.recipeapp.api.getfeed.feedinterfaces.FeedsListListener;
 import com.ravemaster.recipeapp.api.getfeed.models.FeedsApiResponse;
-import com.ravemaster.recipeapp.api.getfeed.models.Item2;
 import com.ravemaster.recipeapp.clickinterfaces.OnMealPlanClicked;
 import com.ravemaster.recipeapp.clickinterfaces.OnTrendingClicked;
 import com.ravemaster.recipeapp.viewmodelfactories.FeedViewModelFactory;
@@ -215,18 +210,19 @@ public class FeedFragment extends Fragment {
     }
 
     private void showFeatured(FeedsApiResponse response) {
+        Item item3 = response.results.get(0).item;
         Glide.with(requireActivity())
                 .load(response.results.get(0).item.thumbnail_url)
                 .placeholder(R.drawable.placeholder)
                 .into(imgFeature);
 
-        id = response.results.get(0).item.id;
+        id = item3.id;
 
-        String name = response.results.get(0).item.name;
+        String name = item3.name;
 
-        int positive = response.results.get(0).item.user_ratings.count_positive;
+        int positive = item3.user_ratings.count_positive;
 
-        int negative = response.results.get(0).item.user_ratings.count_negative;
+        int negative = item3.user_ratings.count_negative;
         int total = positive + negative;
         double percent = ((double) positive / total ) * 100;
         String ratings = String.format("%.1f%%",percent);
@@ -261,7 +257,7 @@ public class FeedFragment extends Fragment {
 
     private final OnMealPlanClicked onMealPlanClicked = new OnMealPlanClicked() {
         @Override
-        public void moveToRecipeDetails(Item2 item2) {
+        public void moveToRecipeDetails(Item item2) {
             Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
             intent.putExtra("id",item2.id);
             startActivity(intent);
@@ -270,7 +266,7 @@ public class FeedFragment extends Fragment {
 
     private final OnTrendingClicked onTrendingClicked = new OnTrendingClicked() {
         @Override
-        public void moveToRecipeDetails(Item2 item) {
+        public void moveToRecipeDetails(Item item) {
             Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
             intent.putExtra("id",item.id);
             startActivity(intent);
