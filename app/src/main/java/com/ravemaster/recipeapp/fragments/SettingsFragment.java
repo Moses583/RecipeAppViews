@@ -94,45 +94,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
-        boolean isDarkTheme = preferenceManager.getIsDarkTheme(Constants.IS_DARK_THEME);
-        materialSwitch.setChecked(isDarkTheme);
-        if (isDarkTheme){
-            txtTheme.setText("Dark theme selected");
-        } else {
-            txtTheme.setText("Light theme selected");
-        }
-
-        materialSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    preferenceManager.isDarkTheme(Constants.IS_DARK_THEME,true);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    restartApp();
-                    txtTheme.setText("Dark theme selected");
-                    Toast.makeText(getActivity(), "Dark theme selected", Toast.LENGTH_SHORT).show();
-                } else {
-                    preferenceManager.isDarkTheme(Constants.IS_DARK_THEME,false);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    restartApp();
-                    txtTheme.setText("Light theme selected");
-                    Toast.makeText(getActivity(), "Light theme selected", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    public void restartApp() {
-        Intent intent = requireActivity().getIntent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        requireActivity().startActivity(intent);
-        requireActivity().finishAffinity();
-    }
-
-    private void initViews(View view) {
-        materialSwitch = view.findViewById(R.id.switchTheme);
-        txtTheme = view.findViewById(R.id.txtTheme);
     }
 
 

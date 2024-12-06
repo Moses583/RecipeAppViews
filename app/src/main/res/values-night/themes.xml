@@ -21,4 +21,5 @@
             <item name="android:colorBackground">@color/background_dark</item>
             <item name="colorOnBackground">@color/white</item>
     </style>
+    <style name="Theme.RecipeApp" parent="Base.Theme.RecipeApp" />
 </resources>
