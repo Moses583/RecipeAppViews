@@ -138,7 +138,7 @@ public class SearchFragment extends Fragment {
 
         });
         if (!isFetched){
-            recipesViewModel.fetchRecipesList(offset,10,mainQuery);
+            recipesViewModel.fetchRecipesList(offset,5,mainQuery);
             viewModel.fetchAutoComplete("lasagna");
             isFetched = true;
         } else {
@@ -149,7 +149,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int newOffset = offset + 10;
-                recipesViewModel.fetchRecipesList(newOffset,10,mainQuery);
+                recipesViewModel.fetchRecipesList(newOffset,5,mainQuery);
             }
         });
 
@@ -158,7 +158,7 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 if (offset != 0) {
                     int newOffset = offset - 10;
-                    recipesViewModel.fetchRecipesList(newOffset,10,mainQuery);
+                    recipesViewModel.fetchRecipesList(newOffset,5,mainQuery);
                 }
 
             }
@@ -167,7 +167,7 @@ public class SearchFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                recipesViewModel.fetchRecipesList(offset,10,mainQuery);
+                recipesViewModel.fetchRecipesList(offset,5,mainQuery);
 
             }
         });
@@ -200,7 +200,7 @@ public class SearchFragment extends Fragment {
 
                     mainQuery = query;
 
-                    recipesViewModel.fetchRecipesList(offset,1,mainQuery);
+                    recipesViewModel.fetchRecipesList(offset,10,mainQuery);
 
                     searchView.hide();
                     // Perform your search logic here

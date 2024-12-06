@@ -67,13 +67,18 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         holder.time.setSelected(true);
         holder.ratings.setText(rating);
         String keywords = results.get(position).keywords;
-        if (keywords.equals("")){
+        if (keywords == null){
             holder.keywords.setVisibility(View.GONE);
             holder.dummy.setVisibility(View.GONE);
         } else {
-            holder.keywords.setVisibility(View.VISIBLE);
-            holder.dummy.setVisibility(View.VISIBLE);
-            holder.keywords.setText(keywords);
+            if (keywords.isEmpty()){
+                holder.keywords.setVisibility(View.GONE);
+                holder.dummy.setVisibility(View.GONE);
+            }else {
+                holder.keywords.setVisibility(View.VISIBLE);
+                holder.dummy.setVisibility(View.VISIBLE);
+                holder.keywords.setText(keywords);
+            }
         }
         holder.servings.setText(String.valueOf(results.get(position).num_servings)+" people");
 
