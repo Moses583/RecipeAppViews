@@ -131,6 +131,7 @@ public class FeedFragment extends Fragment {
          });
          feedViewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), isLoading->{
              if (isLoading){
+                 txtFeatureName.setText("Featured:");
                  hideAnimation();
                  hideLayouts();
                  startShimmer();
