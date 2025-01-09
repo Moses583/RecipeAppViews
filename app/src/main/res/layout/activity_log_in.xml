@@ -8,7 +8,7 @@
     android:clipToPadding="false"
     android:overScrollMode="never"
     android:scrollbars="none"
-    tools:context=".LogInActivity"
+    tools:context=".activities.LogInActivity"
     android:fitsSystemWindows="true">
 
     <LinearLayout

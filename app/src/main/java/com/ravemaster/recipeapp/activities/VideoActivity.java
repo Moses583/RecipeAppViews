@@ -1,4 +1,4 @@
-package com.ravemaster.recipeapp;
+package com.ravemaster.recipeapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
+
+import com.ravemaster.recipeapp.R;
 
 public class VideoActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.ravemaster.recipeapp;
+package com.ravemaster.recipeapp.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -13,24 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.utilities.Constants;
 import com.ravemaster.recipeapp.utilities.PreferenceManager;
-
-import java.util.HashMap;
-import java.util.Objects;
 
 public class LogInActivity extends AppCompatActivity {
 

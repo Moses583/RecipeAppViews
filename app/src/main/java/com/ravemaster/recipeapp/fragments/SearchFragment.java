@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -29,13 +28,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.ravemaster.recipeapp.R;
-import com.ravemaster.recipeapp.RecipeDetailsActivity;
+import com.ravemaster.recipeapp.activities.RecipeDetailsActivity;
 import com.ravemaster.recipeapp.adapters.AutoCompleteAdapter;
 import com.ravemaster.recipeapp.adapters.RecipeListAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
-import com.ravemaster.recipeapp.api.autocomplete.interfaces.AutoCompleteListener;
 import com.ravemaster.recipeapp.api.autocomplete.models.AutoCompleteApiResponse;
-import com.ravemaster.recipeapp.api.getrecipelist.interfaces.RecipeListListener;
 import com.ravemaster.recipeapp.api.getrecipelist.models.RecipeListApiResponse;
 import com.ravemaster.recipeapp.api.getrecipelist.models.Result;
 import com.ravemaster.recipeapp.clickinterfaces.AutoCompleteClick;
@@ -44,8 +41,6 @@ import com.ravemaster.recipeapp.viewmodelfactories.AutoCompleteFactory;
 import com.ravemaster.recipeapp.viewmodelfactories.RecipeListViewModelFactory;
 import com.ravemaster.recipeapp.viewmodels.AutoCompleteViewModel;
 import com.ravemaster.recipeapp.viewmodels.RecipesViewModel;
-
-import java.util.Random;
 
 public class SearchFragment extends Fragment {
 

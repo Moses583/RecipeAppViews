@@ -1,4 +1,4 @@
-package com.ravemaster.recipeapp;
+package com.ravemaster.recipeapp.activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,7 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.ravemaster.recipeapp.adapters.ViewPagerAdapter;
+import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.fragments.FeedFragment;
 import com.ravemaster.recipeapp.fragments.OfflineFragment;
 import com.ravemaster.recipeapp.fragments.SearchFragment;
@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        SplashScreen.installSplashScreen(this);
         setContentView(R.layout.activity_main);
         initViews();
 

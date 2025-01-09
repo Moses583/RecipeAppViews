@@ -1,4 +1,4 @@
-package com.ravemaster.recipeapp;
+package com.ravemaster.recipeapp.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.utilities.Constants;
 import com.ravemaster.recipeapp.utilities.PreferenceManager;
 

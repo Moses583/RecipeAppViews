@@ -1,4 +1,4 @@
-package com.ravemaster.recipeapp;
+package com.ravemaster.recipeapp.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -29,15 +29,14 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ravemaster.recipeapp.R;
 import com.ravemaster.recipeapp.adapters.CreditsAdapter;
 import com.ravemaster.recipeapp.adapters.SimilarAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
 import com.ravemaster.recipeapp.api.getrecipedetails.interfaces.RecipeDetailsListener;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Component;
-import com.ravemaster.recipeapp.api.getrecipedetails.models.Credit;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Instruction;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.RecipeDetailApiResponse;
 import com.ravemaster.recipeapp.api.getrecipedetails.models.Section;

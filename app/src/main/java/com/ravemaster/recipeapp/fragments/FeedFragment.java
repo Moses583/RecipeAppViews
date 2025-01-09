@@ -30,7 +30,7 @@ import com.ravemaster.recipeapp.api.getfeed.models.Recipe;
 import com.ravemaster.recipeapp.clickinterfaces.OnFeatureClicked;
 import com.ravemaster.recipeapp.viewmodels.FeedViewModel;
 import com.ravemaster.recipeapp.R;
-import com.ravemaster.recipeapp.RecipeDetailsActivity;
+import com.ravemaster.recipeapp.activities.RecipeDetailsActivity;
 import com.ravemaster.recipeapp.adapters.MealPlanAdapter;
 import com.ravemaster.recipeapp.adapters.TrendingAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
