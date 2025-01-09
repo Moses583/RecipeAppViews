@@ -31,6 +31,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ravemaster.recipeapp.adapters.CreditsAdapter;
 import com.ravemaster.recipeapp.adapters.SimilarAdapter;
 import com.ravemaster.recipeapp.api.RequestManager;
@@ -53,7 +54,8 @@ import java.util.ArrayList;
 public class RecipeDetailsActivity extends AppCompatActivity {
 
     RequestManager manager;
-    CardView goBack, save, authorsCardView;
+    FloatingActionButton goBack,save;
+    CardView authorsCardView;
     ImageView imgRecipe;
     TextView name, servings, ratings, time, description, ingredients, instructions;
     ShimmerFrameLayout placeholder, similarPlaceHolder;
@@ -365,7 +367,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
             chart.getDescription().setEnabled(false);
             chart.getLegend().setEnabled(true);
-            chart.getLegend().setTextColor(Color.GREEN);
+            chart.getLegend().setTextColor(Color.RED);
             chart.setHoleColor(Color.TRANSPARENT);
             chart.animateY(1000);
             chart.invalidate();
@@ -411,8 +413,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        goBack = findViewById(R.id.cardViewGoBack);
-        save = findViewById(R.id.cardViewSaveRecipe);
+        goBack = findViewById(R.id.btnGoBack);
+        save = findViewById(R.id.btnMore);
         authorsCardView = findViewById(R.id.authorsCardView);
 
         imgRecipe = findViewById(R.id.imgRecipeDetails);

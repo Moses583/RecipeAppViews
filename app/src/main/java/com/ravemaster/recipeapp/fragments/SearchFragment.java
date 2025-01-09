@@ -138,7 +138,7 @@ public class SearchFragment extends Fragment {
 
         });
         if (!isFetched){
-            recipesViewModel.fetchRecipesList(offset,5,mainQuery);
+            recipesViewModel.fetchRecipesList(offset,5,getMainQuery());
             viewModel.fetchAutoComplete("lasagna");
             isFetched = true;
         } else {
@@ -148,8 +148,7 @@ public class SearchFragment extends Fragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newOffset = offset + 10;
-                recipesViewModel.fetchRecipesList(newOffset,5,mainQuery);
+                recipesViewModel.fetchRecipesList(nextPage(),5,getMainQuery());
             }
         });
 
@@ -157,8 +156,9 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (offset != 0) {
-                    int newOffset = offset - 10;
-                    recipesViewModel.fetchRecipesList(newOffset,5,mainQuery);
+                    recipesViewModel.fetchRecipesList(previousPage(offset),5,getMainQuery());
+                } else {
+                    recipesViewModel.fetchRecipesList(0,5,getMainQuery());
                 }
 
             }
@@ -167,8 +167,8 @@ public class SearchFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                recipesViewModel.fetchRecipesList(offset,5,mainQuery);
-
+                recipesViewModel.fetchRecipesList(offset,5,getMainQuery());
+                searchBar.setText("");
             }
         });
 
@@ -198,10 +198,8 @@ public class SearchFragment extends Fragment {
                         (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)){
                     String query = v.getText().toString();
 
-                    mainQuery = query;
-
-                    recipesViewModel.fetchRecipesList(offset,10,mainQuery);
-
+                    recipesViewModel.fetchRecipesList(offset,25,setMainQuery(query));
+                    searchBar.setText(searchView.getText());
                     searchView.hide();
                     // Perform your search logic here
                     return true;
@@ -270,12 +268,27 @@ public class SearchFragment extends Fragment {
         @Override
         public void search(com.ravemaster.recipeapp.api.autocomplete.models.Result result) {
             searchView.hide();
+            searchBar.setText(result.display);
             recipeLayout.setVisibility(View.INVISIBLE);
             recipePlaceHolder.setVisibility(View.VISIBLE);
             recipePlaceHolder.startShimmer();
             recipesViewModel.fetchRecipesList(offset,10, result.display);
         }
     };
+
+    private int nextPage(){
+        return offset += 10;
+    }
+
+    private int previousPage(int page){
+        return offset -= 10;
+    }
+    private String getMainQuery(){
+        return mainQuery;
+    }
+    private String setMainQuery(String q){
+        return this.mainQuery = q;
+    }
 
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recipesRecycler);

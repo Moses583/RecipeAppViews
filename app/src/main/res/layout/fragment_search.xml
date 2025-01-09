@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Search recipes"
-            android:background="?attr/android:colorBackground"/>
+            app:backgroundTint="?attr/colorSurfaceContainerHigh"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.search.SearchView
@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         android:hint="Search recipes"
         android:id="@+id/mySearchView"
-        >
+        app:backgroundTint="?attr/colorSurfaceContainerHigh">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -89,8 +89,9 @@
         android:id="@+id/btnPrev"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        style="?attr/floatingActionButtonSmallStyle"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,7 +99,8 @@
         android:id="@+id/btnNext"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"/>
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        style="?attr/floatingActionButtonSmallStyle"/>
 
 </RelativeLayout>

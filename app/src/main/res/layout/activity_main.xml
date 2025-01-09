@@ -23,7 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/white"
         android:paddingBottom="0dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,7 +32,8 @@
             android:paddingBottom="0dp"
             app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="labeled"
-            android:background="?attr/android:colorBackground"/>
+            app:elevation="0dp"
+            app:background="?attr/colorSurfaceContainer"/>
     </RelativeLayout>
 
 </RelativeLayout>

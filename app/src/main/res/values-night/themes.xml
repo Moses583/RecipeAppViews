@@ -11,15 +11,19 @@
 
             <item name="colorSecondary">@color/pink3</item>
             <item name="colorOnSecondary">@color/white</item>
-            <item name="colorSecondaryContainer">@color/pink5</item>
+            <item name="colorSecondaryContainer">@color/pink6</item>
             <item name="colorOnSecondaryContainer">@color/white</item>
 
-            <item name="colorSurface">@color/black</item>
+            <item name="colorSurface">@color/background_main_dark</item>
             <item name="colorOnSurface">@color/white</item>
-            <item name="colorSurfaceContainer">@color/black</item>
+            <item name="colorSurfaceContainer">@color/background_main_dark</item>
+            <item name="colorSurfaceContainerHigh">@color/background_main_dark</item>
 
-            <item name="android:colorBackground">@color/background_dark</item>
+
+            <item name="android:colorBackground">@color/background_main_dark</item>
             <item name="colorOnBackground">@color/white</item>
+
+            <item name="android:navigationBarColor">@color/background_main_dark</item>
     </style>
     <style name="Theme.RecipeApp" parent="Base.Theme.RecipeApp" />
 </resources>
