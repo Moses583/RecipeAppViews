@@ -1,10 +1,12 @@
 package com.ravemaster.recipeapp.api.getrecipelist.models;
 
-import com.ravemaster.recipeapp.api.getfeed.models.Price;
-
 import java.util.ArrayList;
 
-public class Result {
+public class Recipe {
+    public int _id;
+    public String _index;
+    public String _op_type;
+    public String _type;
     public int approved_at;
     public String aspect_ratio;
     public String beauty_url;
@@ -50,7 +52,7 @@ public class Result {
     public String thumbnail_alt_text;
     public String thumbnail_url;
     public boolean tips_and_ratings_enabled;
-    public ArrayList<Topic> topics;
+    public ArrayList<Object> topics;
     public int total_time_minutes;
     public TotalTimeTier total_time_tier;
     public int updated_at;
@@ -59,5 +61,4 @@ public class Result {
     public int video_id;
     public String video_url;
     public String yields;
-    public ArrayList<Recipe> recipes;
 }
