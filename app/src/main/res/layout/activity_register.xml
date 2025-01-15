@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
         android:layout_margin="15dp"
-        app:cardBackgroundColor="@color/white"
         android:layout_centerInParent="true">
 
         <LinearLayout
@@ -78,7 +77,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 app:endIconMode="clear_text"
-                app:helperTextTextColor="@color/black"
                 app:startIconDrawable="@drawable/ic_user">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -116,7 +114,6 @@
                 android:hint="Confirm your password"
                 app:endIconMode="password_toggle"
                 app:helperTextEnabled="false"
-                app:helperTextTextColor="@color/red"
                 app:startIconDrawable="@drawable/ic_password">
 
                 <com.google.android.material.textfield.TextInputEditText
