@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 public interface GetAutoComplete {
     @GET("recipes/auto-complete")
     @Headers({
-            "x-rapidapi-key: 7e3d2f10bdmsh70e6fefa71835adp16c240jsnb41f1b9c1073",
+            "x-rapidapi-key: ab9a345b1dmsh95573e64e14301dp11f08cjsnbb669399ee87",
             "x-rapidapi-host: tasty.p.rapidapi.com"
     })
     Call<AutoCompleteApiResponse> getAutoComplete(
